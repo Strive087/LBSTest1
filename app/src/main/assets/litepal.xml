@@ -4,7 +4,6 @@
     <version value="1"></version>
 
     <list>
-        <mapping class="com.example.a84045.lbstest1"></mapping>
-
+        <mapping class="com.example.a84045.lbstest1.SellerInfo"></mapping>
     </list>
 </litepal>

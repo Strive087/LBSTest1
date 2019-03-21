@@ -5,11 +5,13 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,11 +22,18 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,14 +66,6 @@ public class MainActivity extends AppCompatActivity {
         baiduMap.setMyLocationEnabled(true);
         positionText = (TextView)findViewById(R.id.position_test_view);
         List<String> permissionList = new ArrayList<>();
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            if (!Settings.System.canWrite(context)) {
-//                Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-//                intent.setData(Uri.parse("package:" + context.getPackageName()));
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                context.startActivity(intent);
-//            }
-//        }
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
         }
@@ -80,6 +81,66 @@ public class MainActivity extends AppCompatActivity {
         }else {
             requestLocation();
         }
+        initdb();
+        houseinfo();
+        baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Intent intent =new Intent(MainActivity.this,HouseInfo.class);
+                startActivity(intent);
+                Log.d("hahahahahha","hhasdf");
+                return true;
+            }
+        });
+    }
+
+    private void initdb(){
+        LitePal.deleteAll(SellerInfo.class);
+        SellerInfo sellerInfo = new SellerInfo();
+        sellerInfo.setName("zhuduanlei");
+        sellerInfo.setLatitude(28.662684);
+        sellerInfo.setLongitude(115.807698);
+        sellerInfo.save();
+        SellerInfo sellerInfo1 = new SellerInfo();
+        sellerInfo1.setName("liwenyue");
+        sellerInfo1.setLatitude(28.663548);
+        sellerInfo1.setLongitude(115.807786);
+        sellerInfo1.save();
+        SellerInfo sellerInfo2 = new SellerInfo();
+        sellerInfo2.setName("hahahah");
+        sellerInfo2.setLatitude(28.663648);
+        sellerInfo2.setLongitude(115.801086);
+        sellerInfo2.save();
+        SellerInfo sellerInfo3 = new SellerInfo();
+        sellerInfo3.setName("hehehhe");
+        sellerInfo3.setLatitude(28.664548);
+        sellerInfo3.setLongitude(115.801786);
+        sellerInfo3.save();
+    }
+
+    private void houseinfo(){
+        List<SellerInfo> sellerInfos = LitePal.findAll(SellerInfo.class);
+        for (SellerInfo sellerInfo : sellerInfos){
+            displayhouse(sellerInfo.getLatitude(),sellerInfo.getLongitude());
+        }
+    }
+
+    private void displayhouse(double latitude,double longitude){
+        //定义Maker坐标点
+        LatLng point = new LatLng(latitude, longitude);
+        //构建Marker图标
+        BitmapDescriptor bitmap = BitmapDescriptorFactory
+                .fromResource(R.drawable.house);
+        //构建MarkerOption，用于在地图上添加Marker
+        OverlayOptions option = new MarkerOptions()
+                .position(point) //必传参数
+                .icon(bitmap) //必传参数
+                .draggable(true)
+                //设置平贴地图，在地图中双指下拉查看效果
+                .flat(true)
+                .alpha(0.5f);
+        //在地图上添加Marker，并显示
+        baiduMap.addOverlay(option);
     }
 
     private void requestLocation(){
@@ -137,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 if(grantResults.length>0){
                     for (int result : grantResults){
-                        if(result != PackageManager.PERMISSION_DENIED){
+                        if(result != PackageManager.PERMISSION_GRANTED){
                             Toast.makeText(this,"必须同意所有权限才能使用本程序",Toast.LENGTH_SHORT).show();
                             finish();
                             return;
