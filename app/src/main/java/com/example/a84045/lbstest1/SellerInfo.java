@@ -1,6 +1,8 @@
 package com.example.a84045.lbstest1;
 
-public class SellerInfo {
+import org.litepal.crud.LitePalSupport;
+
+public class SellerInfo extends LitePalSupport {
 
     private String mail;
 
@@ -8,30 +10,67 @@ public class SellerInfo {
 
     private String phone;
 
-    private String address;
-
     private float price;
 
     private int area;
 
-    private float latitude;
+    private String province;
 
-    private float longitude;
+    private String city;
 
+    private String district;
 
-    public float getLatitude() {
+    private String address;
+
+    private double latitude;
+
+    private double longitude;
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(float latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
@@ -57,14 +96,6 @@ public class SellerInfo {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public float getPrice() {
