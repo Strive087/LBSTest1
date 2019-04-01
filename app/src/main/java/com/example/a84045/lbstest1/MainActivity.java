@@ -63,8 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SDKInitializer.initialize(getApplicationContext());
-        Intent intent =new Intent(MainActivity.this,HouseInfo.class);
-        startActivity(intent);
         SDKInitializer.setCoordType(CoordType.BD09LL);
         setContentView(R.layout.activity_main);
         List<String> permissionList = new ArrayList<>();

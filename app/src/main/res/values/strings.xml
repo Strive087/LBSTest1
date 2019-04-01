@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LBSTest1</string>
+    <string name="app_name">小猪租房</string>
     <string name="title_activity_login">Sign in</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
