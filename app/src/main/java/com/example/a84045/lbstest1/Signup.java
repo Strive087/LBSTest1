@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class Signup extends AppCompatActivity {
 
-    private static final String TAG = "Signup";
+    private static final String TAG = "Signup111";
 
     EditText nameText;
 
@@ -68,17 +68,17 @@ public class Signup extends AppCompatActivity {
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        onSignupSuccess();
                         progressBar.setVisibility(View.GONE);
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        onSignupSuccess();
                     }
                 }, 3000);
     }
 
     public void onSignupSuccess() {
         signupButton.setEnabled(true);
-        setResult(RESULT_OK, null);
-        finish();
+        setResult(RESULT_OK,null);
+        this.finish();
     }
 
     public void onSignupFailed() {

@@ -76,7 +76,6 @@ public class Login extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         onLoginSuccess();
-
                     }
                 },3000 );
     }
@@ -84,7 +83,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == REQUEST_SIGNUP){
-            if(resultCode == RESULT_OK){
+            if(resultCode != RESULT_OK){
                 this.finish();
             }
         }
