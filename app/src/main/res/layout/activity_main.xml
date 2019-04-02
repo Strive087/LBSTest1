@@ -15,6 +15,9 @@
         android:id="@+id/lwy_button"
         android:layout_width="50dip"
         android:layout_height="50dip"
-        android:background="@drawable/shape"/>
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/goback"/>
 
 </FrameLayout>
