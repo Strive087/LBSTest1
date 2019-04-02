@@ -38,7 +38,7 @@
         <activity android:name=".Login" android:theme="@style/AppTheme.NoBar" />
         <activity android:name=".Signup" android:theme="@style/AppTheme.NoBar" />
         <activity android:name=".HouseInfo" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity"/>
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="orgi7hGIXqnEk1DZZ8g9trlQVe24fuy1" />
