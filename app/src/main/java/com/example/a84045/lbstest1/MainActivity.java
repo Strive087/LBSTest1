@@ -2,19 +2,21 @@ package com.example.a84045.lbstest1;
 
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -59,6 +61,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private BDLocation mlocaltion;
 
+    private Toolbar mToolbar;
+
+    private DrawerLayout mDrawerLayout;
+
+    private long firstPressedTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +90,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             requestLocation();
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() - firstPressedTime < 2000) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(MainActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
+            firstPressedTime = System.currentTimeMillis();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.message:
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     private void initdb(){
@@ -133,12 +171,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         baiduMap.addOverlay(option);
     }
 
+
     public void setInit() {
         mapView = (MapView)findViewById(R.id.bmapView);
         baiduMap = mapView.getMap();
         mapView.showZoomControls(false);
         Button button = (Button) findViewById(R.id.lwy_button);
         button.setOnClickListener(this);
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        mDrawerLayout = findViewById(R.id.drawr_layout);
+        mToolbar.setNavigationIcon(R.drawable.person1);
     }
 
     private void initMap() {
@@ -150,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mLocationClient.start();//开启定位
         mLocationClient.requestLocation();//图片点击事件，回到定位点
     }
-
 
     public void initLocation(){
         LocationClientOption option = new LocationClientOption();

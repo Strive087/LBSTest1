@@ -1,23 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawr_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/bmapView"
+    <FrameLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/bmapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true" />
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        </android.support.v7.widget.Toolbar>
+
+        <Button
+            android:id="@+id/lwy_button"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/goback"/>
+
+    </FrameLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:clickable="true" />
+        android:layout_gravity="start"
+        app:menu="@menu/nav_menu"
+        app:headerLayout="@layout/nav_header">
+    </android.support.design.widget.NavigationView>
 
-    <Button
-        android:id="@+id/lwy_button"
-        android:layout_width="50dip"
-        android:layout_height="50dip"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/goback"/>
-
-</FrameLayout>
+</android.support.v4.widget.DrawerLayout>
