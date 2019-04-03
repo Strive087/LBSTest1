@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.annotation.LongDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.internal.NavigationMenuItemView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -78,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private PopupWindow popupWindow;
 
     private View rootView;
+
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +207,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(mToolbar);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mToolbar.setNavigationIcon(R.drawable.person1);
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setItemIconPadding(10);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             setPopupWindow();
         }
