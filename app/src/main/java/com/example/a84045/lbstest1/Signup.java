@@ -47,6 +47,7 @@ public class Signup extends AppCompatActivity {
         loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_OK,null);
                 finish();
             }
         });
@@ -78,7 +79,7 @@ public class Signup extends AppCompatActivity {
     public void onSignupSuccess() {
         signupButton.setEnabled(true);
         setResult(RESULT_OK,null);
-        this.finish();
+        finish();
     }
 
     public void onSignupFailed() {

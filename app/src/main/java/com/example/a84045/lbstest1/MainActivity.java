@@ -4,21 +4,24 @@ package com.example.a84045.lbstest1;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
@@ -67,6 +70,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private long firstPressedTime;
 
+    private PopupWindow popupWindow;
+
+    private View rootView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +97,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             requestLocation();
         }
 
+    }
+
+    private void setPopupWindow(){
+        popupWindow = new PopupWindow(getApplicationContext());
+        popupWindow=new PopupWindow(this);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        //popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(true);
+        final Button btn = findViewById(R.id.popup_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View contentView= LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_popuphouse,null);
+                popupWindow.setContentView(contentView);
+                popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+                popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+                popupWindow.showAsDropDown(btn);
+                Log.d("adfasf","afasdfasf");
+            }
+        });
     }
 
     @Override
@@ -180,8 +207,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button.setOnClickListener(this);
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        mDrawerLayout = findViewById(R.id.drawr_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         mToolbar.setNavigationIcon(R.drawable.person1);
+        setPopupWindow();
     }
 
     private void initMap() {
