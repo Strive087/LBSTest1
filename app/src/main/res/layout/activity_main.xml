@@ -36,12 +36,6 @@
             android:layout_marginRight="5dp"
             android:background="@drawable/goback"/>
 
-        <Button android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="底部弹出PopupWindow"
-            android:id="@+id/popup_button"/>
-
 
     </FrameLayout>
 

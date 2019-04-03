@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="#60000000">
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <LinearLayout
             android:orientation="vertical"
-            android:layout_margin="10dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
@@ -25,10 +24,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="20dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"/>
-
             <TextView
                 android:id="@+id/t2"
                 android:layout_width="match_parent"
@@ -41,9 +36,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="20dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"/>
+
 
             <TextView
                 android:id="@+id/t3"
@@ -57,10 +50,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="20dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"/>
-
             <TextView
                 android:id="@+id/t4"
                 android:layout_width="match_parent"
@@ -73,9 +62,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="20dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"/>
 
             <TextView
                 android:id="@+id/t5"
@@ -89,9 +75,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="20dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

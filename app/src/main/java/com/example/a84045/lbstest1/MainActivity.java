@@ -5,21 +5,25 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.LongDef;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -47,6 +51,7 @@ import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -100,23 +105,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setPopupWindow(){
+        rootView = findViewById(R.id.root_main);
         popupWindow = new PopupWindow(getApplicationContext());
         popupWindow=new PopupWindow(this);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         //popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(true);
-        final Button btn = findViewById(R.id.popup_button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                View contentView= LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_popuphouse,null);
-                popupWindow.setContentView(contentView);
-                popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-                popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-                popupWindow.showAsDropDown(btn);
-                Log.d("adfasf","afasdfasf");
-            }
-        });
     }
 
     @Override
@@ -209,7 +203,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(mToolbar);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mToolbar.setNavigationIcon(R.drawable.person1);
-        setPopupWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            setPopupWindow();
+        }
     }
 
     private void initMap() {
@@ -253,8 +249,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                Intent intent =new Intent(MainActivity.this,HouseInfo.class);
-                startActivity(intent);
+                DisplayMetrics metrics =new DisplayMetrics();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+                }
+                final int height = metrics.heightPixels;
+                View contentView= LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_popuphouse,null);
+                popupWindow.setContentView(contentView);
+                popupWindow.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
+                popupWindow.setHeight(height*3/5);
+                popupWindow.showAtLocation(rootView,Gravity.BOTTOM,0,0);
                 return true;
             }
         });

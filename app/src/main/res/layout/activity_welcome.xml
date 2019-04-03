@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:gravity="center"
+    android:gravity="bottom|center_horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
 
-        <android.support.v7.widget.AppCompatImageView
+        <LinearLayout
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/pig"/>
+            android:layout_marginBottom="20dp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/pig" />
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="小猪租房"
+                    android:textSize="30dp" />
+
+        </LinearLayout>
 
 
 </LinearLayout>

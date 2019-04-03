@@ -16,7 +16,7 @@ public class Welcome extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(2000);
                     getApplicationContext().startActivity(intent);
                     finish();
                 } catch (InterruptedException e) {
