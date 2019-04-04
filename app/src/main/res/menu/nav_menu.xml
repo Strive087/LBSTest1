@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="?attr/colorPrimary"
+    >
 
     <group android:checkableBehavior="single">
 
         <item
+
+            android:id="@+id/nav_rent"
+            android:icon="@drawable/nav_rent"
+            android:title="房屋出租"></item>
+
+        <item
+            android:id="@+id/nav_order"
+            android:icon="@drawable/nav_order"
+            android:title="历史订单"></item>
+
+        <item
+            android:id="@+id/nav_record"
+            android:icon="@drawable/nav_record"
+            android:title="观房记录"></item>
+
+        <item
             android:id="@+id/nav_call"
-            android:title="Call"></item>
-
-        <item
-            android:id="@+id/nav_friend"
-            android:title="Friend"></item>
-
-        <item
-            android:id="@+id/nav_mail"
-            android:title="Mail"></item>
+            android:icon="@drawable/nav_call"
+            android:title="关于我们"></item>
     </group>
 
 </menu>
