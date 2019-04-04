@@ -115,6 +115,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         //popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(true);
+        popupWindow.setAnimationStyle(R.style.pop_animation);
+        View view = findViewById(R.id.root_main);
+        popupWindow.showAtLocation(view,Gravity.CENTER,0,0);
     }
 
     @Override
@@ -206,7 +209,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         mDrawerLayout = findViewById(R.id.drawer_layout);
-        mToolbar.setNavigationIcon(R.drawable.person1);
+        mToolbar.setNavigationIcon(R.mipmap.person);
+        mToolbar.setContentInsetStartWithNavigation(15);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setItemIconPadding(10);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
