@@ -6,17 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/root_main"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <com.baidu.mapapi.map.MapView
-            android:id="@+id/bmapView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true" />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -28,17 +22,28 @@
             app:titleTextColor="@color/design_default_color_primary">
         </android.support.v7.widget.Toolbar>
 
-        <Button
-            android:id="@+id/lwy_button"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:layout_gravity="bottom|right"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/goback"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <com.baidu.mapapi.map.MapView
+                android:id="@+id/bmapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true" />
 
-    </FrameLayout>
+            <Button
+                android:id="@+id/lwy_button"
+                android:layout_width="50dip"
+                android:layout_height="50dip"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/goback"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
