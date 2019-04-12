@@ -136,19 +136,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                break;
-            case R.id.message:
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
 
     private void initdb(){
         LitePal.deleteAll(SellerInfo.class);
@@ -212,10 +199,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mToolbar.setNavigationIcon(R.mipmap.person);
         mToolbar.setContentInsetStartWithNavigation(15);
         navigationView = findViewById(R.id.nav_view);
-        navigationView.setItemIconPadding(10);
+        navigationView.setItemIconPadding(30);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             setPopupWindow();
         }
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Intent intent=null;
+                switch (menuItem.getItemId()){
+                    case R.id.nav_rent:
+                        intent = new Intent(getApplicationContext(),HouseSell.class);
+                        break;
+                    case R.id.nav_order:
+                        intent = new Intent(getApplicationContext(),HouseOrder.class);
+                        break;
+                    case R.id.nav_record:
+                        intent = new Intent(getApplicationContext(),HouseRecord.class);
+                        break;
+                    default:
+                        intent = new Intent(getApplicationContext(),CallMe.class);
+                        break;
+                }
+                startActivity(intent);
+                return true;
+            }
+        });
     }
 
     private void initMap() {
@@ -368,6 +377,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             default:
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.message:
+                break;
+            case R.id.search:
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
     @Override

@@ -26,8 +26,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".Welcome">
+        <activity android:name=".CallMe"></activity>
+        <activity android:name=".HouseRecord" />
+        <activity android:name=".HouseOrder" />
+        <activity android:name=".HouseSell" />
+        <activity android:name=".Welcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,9 +40,11 @@
         <activity android:name=".Login" />
         <activity android:name=".Signup" />
         <activity android:name=".MainActivity" />
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="orgi7hGIXqnEk1DZZ8g9trlQVe24fuy1" />
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
