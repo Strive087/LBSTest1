@@ -41,7 +41,17 @@
         <activity android:name=".Login" />
         <activity android:name=".Signup" />
         <activity android:name=".MainActivity" />
-
+        
+        <provider
+            android:authorities="com.example.cameraalbumtest.fileprovider"
+            android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+        
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="orgi7hGIXqnEk1DZZ8g9trlQVe24fuy1" />
