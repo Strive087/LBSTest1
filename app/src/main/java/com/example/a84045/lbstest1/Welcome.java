@@ -2,6 +2,7 @@ package com.example.a84045.lbstest1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.internal.NavigationMenuItemView;
 import android.support.v7.app.AppCompatActivity;
 
 public class Welcome extends AppCompatActivity {

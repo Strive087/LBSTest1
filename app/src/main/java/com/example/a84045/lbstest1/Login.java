@@ -1,10 +1,11 @@
 package com.example.a84045.lbstest1;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,10 +15,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a84045.lbstest1.Global.Variable;
+import com.zhy.http.okhttp.OkHttpUtils;
+
+import java.io.IOException;
+
+import okhttp3.Response;
+
 
 public class Login extends AppCompatActivity {
 
-    private static final String TAG = "Login1111";
+    private static final int GET_RESPONSE = 1;
 
     private static final int REQUEST_SIGNUP = 0;
 
@@ -30,6 +38,32 @@ public class Login extends AppCompatActivity {
     TextView signupLink;
 
     ProgressBar progressBar;
+
+    private Handler handler = new Handler(){
+        public void handleMessage(Message message){
+            switch (message.what){
+                case GET_RESPONSE:
+                    Bundle data = message.getData();
+                    String responseData = data.getString("response");
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    progressBar.setVisibility(View.GONE);
+                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                }
+                            }, 1000);
+                    if(responseData.equals("true")){
+                        onLoginSuccess();
+                    } else {
+                        onLoginFailed();
+                    }
+                    break;
+                default:
+                    break;
+
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +88,10 @@ public class Login extends AppCompatActivity {
             }
         });
 
+
     }
 
     public void login(){
-        Log.d(TAG,"login222");
         if(!validate()){
             onLoginFailed();
             return;
@@ -66,18 +100,27 @@ public class Login extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setIndeterminate(true);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.GONE);
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        onLoginSuccess();
-                    }
-                },3000 );
+        final String email = emailText.getText().toString();
+        final String password = passwordText.getText().toString();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response response = OkHttpUtils.post().url(Variable.host+"/verifypassword")
+                            .addParams("usermail",email).addParams("password",password).build().execute();
+                    String responseData = response.body().string();
+                    Log.i("aff",responseData);
+                    Message message = new Message();
+                    message.what = GET_RESPONSE;
+                    Bundle data = new Bundle();
+                    data.putString("response",responseData);
+                    message.setData(data);
+                    handler.sendMessage(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -95,6 +138,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void onLoginSuccess(){
+        Toast.makeText(getBaseContext(),"login success",Toast.LENGTH_SHORT).show();
         loginButton.setEnabled(true);
         finish();
         Intent intent = new Intent(getApplicationContext(),MainActivity.class);

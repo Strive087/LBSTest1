@@ -2,28 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="#FFF">
 
-    <group android:checkableBehavior="single">
 
-        <item
+    <item
+        android:id="@+id/nav_rent"
+        android:icon="@drawable/nav_rent"
+        android:title="房屋出租"></item>
 
-            android:id="@+id/nav_rent"
-            android:icon="@drawable/nav_rent"
-            android:title="房屋出租"></item>
+    <item
+        android:id="@+id/nav_order"
+        android:icon="@drawable/nav_order"
+        android:title="历史订单"></item>
 
-        <item
-            android:id="@+id/nav_order"
-            android:icon="@drawable/nav_order"
-            android:title="历史订单"></item>
+    <item
+        android:id="@+id/nav_record"
+        android:icon="@drawable/nav_record"
+        android:title="观房记录"></item>
 
-        <item
-            android:id="@+id/nav_record"
-            android:icon="@drawable/nav_record"
-            android:title="观房记录"></item>
+    <item
+        android:id="@+id/nav_call"
+        android:icon="@drawable/nav_call"
+        android:title="关于我们"></item>
 
-        <item
-            android:id="@+id/nav_call"
-            android:icon="@drawable/nav_call"
-            android:title="关于我们"></item>
-    </group>
 
 </menu>
