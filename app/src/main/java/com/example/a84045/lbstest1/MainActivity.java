@@ -7,10 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.LongDef;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -69,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private float mLastX;
 
-    private BDLocation mlocaltion;
+    public static BDLocation mlocaltion;
 
     private Toolbar mToolbar;
 

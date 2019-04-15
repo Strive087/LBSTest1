@@ -102,6 +102,7 @@ public class Login extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         final String email = emailText.getText().toString();
         final String password = passwordText.getText().toString();
+        Variable.usermail = email;
         new Thread(new Runnable() {
             @Override
             public void run() {

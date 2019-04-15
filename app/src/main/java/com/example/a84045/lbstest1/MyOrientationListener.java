@@ -13,6 +13,7 @@ public class MyOrientationListener implements SensorEventListener {
     private Context mContext;
     private Sensor mSensor;
     private float lastX;
+    private boolean isRegisterListener;
  
  
     private OnOrientationListener mOnOrientationListener;
@@ -35,12 +36,13 @@ public class MyOrientationListener implements SensorEventListener {
         }
  
         if (mSensor != null) {
-            mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_UI);
+            isRegisterListener=mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_UI);
         }
     }
  
     public void stop() {
         //停止定位
+        if (isRegisterListener)
         mSensorManager.unregisterListener(this);
     }
  
