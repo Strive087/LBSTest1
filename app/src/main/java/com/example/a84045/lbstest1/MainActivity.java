@@ -45,11 +45,18 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.example.a84045.lbstest1.Entity.HouseRent;
+import com.example.a84045.lbstest1.Global.Variable;
+import com.example.a84045.lbstest1.Util.GsonUtil;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.Callback;
 
-import org.litepal.LitePal;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -79,6 +86,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View rootView;
 
     private NavigationView navigationView;
+
+    public abstract class HouseRentCallback extends Callback<List<HouseRent>>
+    {
+        @Override
+        public List<HouseRent> parseNetworkResponse(Response response) throws IOException
+        {
+            String string = response.body().string();
+            return GsonUtil.changeGsonToList(string,HouseRent.class);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,35 +151,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void initdb(){
-        LitePal.deleteAll(SellerInfo.class);
-        SellerInfo sellerInfo = new SellerInfo();
-        sellerInfo.setName("zhuduanlei");
-        sellerInfo.setLatitude(28.662684);
-        sellerInfo.setLongitude(115.807698);
-        sellerInfo.save();
-        SellerInfo sellerInfo1 = new SellerInfo();
-        sellerInfo1.setName("liwenyue");
-        sellerInfo1.setLatitude(28.663548);
-        sellerInfo1.setLongitude(115.807786);
-        sellerInfo1.save();
-        SellerInfo sellerInfo2 = new SellerInfo();
-        sellerInfo2.setName("hahahah");
-        sellerInfo2.setLatitude(28.663648);
-        sellerInfo2.setLongitude(115.801086);
-        sellerInfo2.save();
-        SellerInfo sellerInfo3 = new SellerInfo();
-        sellerInfo3.setName("hehehhe");
-        sellerInfo3.setLatitude(28.664548);
-        sellerInfo3.setLongitude(115.801786);
-        sellerInfo3.save();
-    }
+//    private void initdb(){
+//        LitePal.deleteAll(SellerInfo.class);
+//        SellerInfo sellerInfo = new SellerInfo();
+//        sellerInfo.setName("zhuduanlei");
+//        sellerInfo.setLatitude(28.662684);
+//        sellerInfo.setLongitude(115.807698);
+//        sellerInfo.save();
+//        SellerInfo sellerInfo1 = new SellerInfo();
+//        sellerInfo1.setName("liwenyue");
+//        sellerInfo1.setLatitude(28.663548);
+//        sellerInfo1.setLongitude(115.807786);
+//        sellerInfo1.save();
+//        SellerInfo sellerInfo2 = new SellerInfo();
+//        sellerInfo2.setName("hahahah");
+//        sellerInfo2.setLatitude(28.663648);
+//        sellerInfo2.setLongitude(115.801086);
+//        sellerInfo2.save();
+//        SellerInfo sellerInfo3 = new SellerInfo();
+//        sellerInfo3.setName("hehehhe");
+//        sellerInfo3.setLatitude(28.664548);
+//        sellerInfo3.setLongitude(115.801786);
+//        sellerInfo3.save();
+//    }
 
     private void houseinfo(){
-        List<SellerInfo> sellerInfos = LitePal.findAll(SellerInfo.class);
-        for (SellerInfo sellerInfo : sellerInfos){
-            displayhouse(sellerInfo.getLatitude(),sellerInfo.getLongitude());
-        }
+        OkHttpUtils.post().url(Variable.host+"/getAllHouseRent").build().execute(new HouseRentCallback() {
+            @Override
+            public void onError(Call call, Exception e) {
+
+            }
+
+            @Override
+            public void onResponse(List<HouseRent> response) {
+                Log.d("sdfsadf",response.get(0).getHousename());
+                Log.d("sdfsadf",response.get(1).getHousecity());
+            }
+        });
+//        for (SellerInfo sellerInfo : sellerInfos){
+//            displayhouse(sellerInfo.getLatitude(),sellerInfo.getLongitude());
+//        }
     }
 
     private void displayhouse(double latitude,double longitude){
@@ -260,7 +288,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setInit();
         initMap();
         initMyOrien();
-        initdb();
         houseinfo();
         baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
             @Override
