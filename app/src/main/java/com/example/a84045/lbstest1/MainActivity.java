@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public List<HouseRent> parseNetworkResponse(Response response) throws IOException
         {
+            Log.d("sdfsadf","start");
             String string = response.body().string();
             return GsonUtil.changeGsonToList(string,HouseRent.class);
         }
@@ -184,8 +185,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onResponse(List<HouseRent> response) {
-                Log.d("sdfsadf",response.get(0).getHousename());
-                Log.d("sdfsadf",response.get(1).getHousecity());
+                Log.d("sdfsadf","over");
+//                Log.d("sdfsadf",response.get(0).getHousename());
             }
         });
 //        for (SellerInfo sellerInfo : sellerInfos){
