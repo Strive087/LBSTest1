@@ -2,9 +2,12 @@ package com.example.a84045.lbstest1;
 
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -24,7 +28,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
@@ -47,12 +54,16 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.example.a84045.lbstest1.Entity.HouseRent;
 import com.example.a84045.lbstest1.Global.Variable;
+import com.example.a84045.lbstest1.Util.DataUtil;
 import com.example.a84045.lbstest1.Util.GsonUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.Callback;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.Call;
@@ -87,12 +98,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private NavigationView navigationView;
 
+    private String housemasterphone;
+
     public abstract class HouseRentCallback extends Callback<List<HouseRent>>
     {
         @Override
         public List<HouseRent> parseNetworkResponse(Response response) throws IOException
         {
-            Log.d("sdfsadf","start");
             String string = response.body().string();
             return GsonUtil.changeGsonToList(string,HouseRent.class);
         }
@@ -151,63 +163,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-
-//    private void initdb(){
-//        LitePal.deleteAll(SellerInfo.class);
-//        SellerInfo sellerInfo = new SellerInfo();
-//        sellerInfo.setName("zhuduanlei");
-//        sellerInfo.setLatitude(28.662684);
-//        sellerInfo.setLongitude(115.807698);
-//        sellerInfo.save();
-//        SellerInfo sellerInfo1 = new SellerInfo();
-//        sellerInfo1.setName("liwenyue");
-//        sellerInfo1.setLatitude(28.663548);
-//        sellerInfo1.setLongitude(115.807786);
-//        sellerInfo1.save();
-//        SellerInfo sellerInfo2 = new SellerInfo();
-//        sellerInfo2.setName("hahahah");
-//        sellerInfo2.setLatitude(28.663648);
-//        sellerInfo2.setLongitude(115.801086);
-//        sellerInfo2.save();
-//        SellerInfo sellerInfo3 = new SellerInfo();
-//        sellerInfo3.setName("hehehhe");
-//        sellerInfo3.setLatitude(28.664548);
-//        sellerInfo3.setLongitude(115.801786);
-//        sellerInfo3.save();
-//    }
-
     private void houseinfo(){
         OkHttpUtils.post().url(Variable.host+"/getAllHouseRent").build().execute(new HouseRentCallback() {
             @Override
             public void onError(Call call, Exception e) {
 
             }
-
             @Override
             public void onResponse(List<HouseRent> response) {
-                Log.d("sdfsadf","over");
-//                Log.d("sdfsadf",response.get(0).getHousename());
+                for (HouseRent houseRent : response){
+                    if(response != null && mlocaltion != null)
+                    if (Math.pow(houseRent.getHouselongtitude()-mlocaltion.getLongitude(),2)+
+                            Math.pow(houseRent.getHouselatitude()-mlocaltion.getLatitude(),2) <= 0.01){
+                        Bundle bundle = new Bundle();
+                        DataUtil data = new DataUtil();
+                        data.setHouseRent(houseRent);
+                        bundle.putSerializable("HouseRent",data);
+                        displayhouse(houseRent.getHouselatitude(),houseRent.getHouselongtitude(),bundle);
+                    }
+                }
             }
         });
-//        for (SellerInfo sellerInfo : sellerInfos){
-//            displayhouse(sellerInfo.getLatitude(),sellerInfo.getLongitude());
-//        }
+
     }
 
-    private void displayhouse(double latitude,double longitude){
+    private void displayhouse(double latitude,double longitude,Bundle bundle){
         //定义Maker坐标点
         LatLng point = new LatLng(latitude, longitude);
         //构建Marker图标
-        BitmapDescriptor bitmap = BitmapDescriptorFactory
-                .fromResource(R.drawable.house);
+        BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.drawable.house);
         //构建MarkerOption，用于在地图上添加Marker
         OverlayOptions option = new MarkerOptions()
                 .position(point) //必传参数
+                .scaleX(0.2f)
+                .scaleY(0.2f)
+                .zIndex(9)
                 .icon(bitmap) //必传参数
-                .draggable(true)
-                //设置平贴地图，在地图中双指下拉查看效果
-                .flat(true)
-                .alpha(0.5f);
+                .extraInfo(bundle);
         //在地图上添加Marker，并显示
         baiduMap.addOverlay(option);
     }
@@ -289,7 +281,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setInit();
         initMap();
         initMyOrien();
-        houseinfo();
         baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -303,10 +294,102 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 popupWindow.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
                 popupWindow.setHeight(height*3/5);
                 popupWindow.showAtLocation(rootView,Gravity.BOTTOM,0,0);
+                houseRentInfo(marker,contentView);
                 return true;
             }
         });
     }
+
+    private void houseRentInfo(Marker marker,View contentView){
+        Bundle bundle = marker.getExtraInfo();
+        DataUtil data = (DataUtil) bundle.get("HouseRent");
+        HouseRent houseRent = data.getHouseRent();
+        TextView housename = contentView.findViewById(R.id.house_name);
+        housename.setText(houseRent.getHousename()+":");
+        TextView housedescription = contentView.findViewById(R.id.house_description);
+        housedescription.setText(houseRent.getHousedescription());
+        TextView houseshape = contentView.findViewById(R.id.house_shape);
+        houseshape.setText(houseRent.getHouseshape());
+        TextView houseprice = contentView.findViewById(R.id.house_price);
+        houseprice.setText(houseRent.getHouseprice()+" 元");
+        TextView housearea = contentView.findViewById(R.id.house_area);
+        housearea.setText(houseRent.getHousearea()+" 平方米");
+        TextView housemaster = contentView.findViewById(R.id.house_master);
+        if(houseRent.getUsersex().equals("1") || houseRent.getUsersex().equals("true")){
+            housemaster.setText(houseRent.getUsername()+" (男)");
+        }else{
+            housemaster.setText(houseRent.getUsername()+" (女)");
+        }
+        final ImageView housephoto0 = contentView.findViewById(R.id.house_photo0);
+        final ImageView housephoto1 = contentView.findViewById(R.id.house_photo1);
+        final ImageView housephoto2 = contentView.findViewById(R.id.house_photo2);
+        final ImageView housephoto3 = contentView.findViewById(R.id.house_photo3);
+        if(!houseRent.getHousephoto0().equals("null")){
+            OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",Variable.user.getUsermail())
+                    .addParams("imageName",houseRent.getHousephoto0()).build().execute(new BitmapCallback() {
+                        @Override
+                        public void onError(Call call, Exception e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Bitmap bitmap) {
+                            housephoto0.setImageBitmap(bitmap);
+                        }
+                    });
+            if(!houseRent.getHousephoto1().equals("null")){
+                OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",Variable.user.getUsermail())
+                        .addParams("imageName",houseRent.getHousephoto1()).build().execute(new BitmapCallback() {
+                    @Override
+                    public void onError(Call call, Exception e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        housephoto1.setImageBitmap(bitmap);
+                    }
+                });
+                if(!houseRent.getHousephoto2().equals("null")){
+                    OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",Variable.user.getUsermail())
+                            .addParams("imageName",houseRent.getHousephoto2()).build().execute(new BitmapCallback() {
+                        @Override
+                        public void onError(Call call, Exception e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Bitmap bitmap) {
+                            housephoto2.setImageBitmap(bitmap);
+                        }
+                    });
+                    if(!houseRent.getHousephoto3().equals("null")){
+                        OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",Variable.user.getUsermail())
+                                .addParams("imageName",houseRent.getHousephoto3()).build().execute(new BitmapCallback() {
+                            @Override
+                            public void onError(Call call, Exception e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Bitmap bitmap) {
+                                housephoto3.setImageBitmap(bitmap);
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+        Button housephone = contentView.findViewById(R.id.house_phone);
+        housemasterphone = houseRent.getUserphone();
+        Button sendorder = contentView.findViewById(R.id.send_order);
+        housephone.setOnClickListener(this);
+        sendorder.setOnClickListener(this);
+        Variable.houseRent = houseRent;
+    }
+
+
 
     private void initMyOrien() {
         //方向传感器
@@ -324,7 +407,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStart() {
         super.onStart();
         //开启定位的允许
-        baiduMap.setMyLocationEnabled(true);
+        if (baiduMap != null){
+            baiduMap.setMyLocationEnabled(true);
+        }
         if (!mLocationClient.isStarted()) {
             mLocationClient.start();
             //开启方向传感器
@@ -368,7 +453,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 LatLng ll = new LatLng(bdLocation.getLatitude(),bdLocation.getLongitude());
                 MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
                 baiduMap.animateMapStatus(update);
-                MapStatusUpdate update1 =  MapStatusUpdateFactory.zoomTo(19f);
+                MapStatusUpdate update1 =  MapStatusUpdateFactory.zoomTo(18f);
                 baiduMap.animateMapStatus(update1);
                 goBackLocation = false;
             }
@@ -400,7 +485,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     finish();
                 }
                 break;
+            case 2:
+                if(grantResults.length>0){
+                    if(grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                        Toast.makeText(this,"必须同意所有权限才能使用本程序",Toast.LENGTH_SHORT).show();
+                        return;
+                    }else{
+                        Intent intent=new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+housemasterphone));
+                        startActivity(intent);
+                    }
+                }else{
+                    Toast.makeText(this,"发生未知错误",Toast.LENGTH_SHORT).show();
+                }
+                break;
             default:
+                break;
         }
     }
 
@@ -427,10 +526,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 goBackLocation = true;
                 navigateTo(mlocaltion);
                 break;
+            case R.id.house_phone:
+                if (ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CALL_PHONE},2);
+                }else{
+                    Intent intent=new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+housemasterphone));
+                    startActivity(intent);
+                }
+                break;
+            case R.id.send_order:
+                sendOrder();
+                break;
             default:
                 break;
         }
 
+    }
+
+    private void sendOrder(){
+        EditText et = new EditText(this);
+        final EditText et1 = et;
+        new AlertDialog.Builder(this)
+                .setTitle("输入您要居住的月数").setView(et1)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String input = et1.getText().toString();
+                        if (input.equals("")) {
+                            Toast.makeText(getApplicationContext(), "内容不能为空！" + input, Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            HouseRent houseRent = Variable.houseRent;
+                            Date d = new Date();
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            String orderdate = sdf.format(d);
+                            String orderprice = (Float)(Float.parseFloat(input) * houseRent.getHouseprice()) + "";
+                            OkHttpUtils.post().url(Variable.host+"/addHouseOrder").addParams("orderdate",orderdate)
+                                    .addParams("orderprice",orderprice).addParams("orderday",input)
+                                    .addParams("orderstatu","0").addParams("houseid",houseRent.getHouseid()+"")
+                                    .addParams("housename",houseRent.getHousename()).addParams("houseprovince",houseRent.getHouseprovince())
+                                    .addParams("housecity",houseRent.getHousecity()).addParams("housedistrict",houseRent.getHousedistrict())
+                                    .addParams("housestreet",houseRent.getHousestreet()).addParams("sellerid",houseRent.getUserid()+"")
+                                    .addParams("sellerphone",houseRent.getUserphone()).addParams("sellername",houseRent.getUsername())
+                                    .addParams("buyerid",Variable.user.getUserid()+"").addParams("buyername",Variable.user.getUsername())
+                                    .addParams("buyerphone",Variable.user.getUserphone()).build().execute(new Callback() {
+                                @Override
+                                public Object parseNetworkResponse(Response response) throws Exception {
+                                    return null;
+                                }
+
+                                @Override
+                                public void onError(Call call, Exception e) {
+
+                                }
+
+                                @Override
+                                public void onResponse(Object response) {
+                                    Intent intent = new Intent(MainActivity.this,HouseOrder.class);
+                                    startActivity(intent);
+                                }
+                            });
+
+                        }
+                    }
+                })
+                .setNegativeButton("取消", null).show();
     }
 
     public class MyLocationListener extends BDAbstractLocationListener{
@@ -438,8 +597,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onReceiveLocation(BDLocation location) {
             if (location.getLocType() == BDLocation.TypeGpsLocation ||
                     location.getLocType() == BDLocation.TypeNetWorkLocation){
-                mlocaltion = location;
+                if (location.getCity() != null)
+                    mlocaltion = location;
                 navigateTo(location);
+                houseinfo();
             }
         }
     }

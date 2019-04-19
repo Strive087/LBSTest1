@@ -276,7 +276,7 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
                 int num = 0;
                 for(String path : listFilePath){
                     String suffixName = path.substring(path.lastIndexOf("."));
-                    File file = new File(BitmapUtil.compressImage(path,getExternalCacheDir()+"/"+ Variable.usermail+"_photo"+num+suffixName));
+                    File file = new File(BitmapUtil.compressImage(path,getExternalCacheDir()+"/"+ Variable.user.getUsermail()+"_photo"+num+suffixName));
                     files.add(file);
                     num++;
                 }
@@ -291,7 +291,7 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
                         for (int num = 0 ; files.size() > num ; num++){
                             String filename1 = filename+"_"+num+".jpg";
                             OkHttpUtils.post().addFile("file",filename1,files.get(num))
-                                    .addParams("usermail",Variable.usermail).url(Variable.host+"/uploadImage").build().execute(new Callback() {
+                                    .addParams("usermail",Variable.user.getUsermail()).url(Variable.host+"/uploadImage").build().execute(new Callback() {
                                 @Override
                                 public Object parseNetworkResponse(Response response) throws Exception {
                                     return null;
@@ -314,80 +314,69 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpUtils.post().url(Variable.host+"/getuserbymail")
-                        .addParams("usermail",Variable.usermail).build().execute(new UserCallback() {
+                new Thread(new Runnable() {
                     @Override
-                    public void onError(Call call, Exception e) {
+                    public void run() {
+                        String filename0="null";
+                        String filename1="null";
+                        String filename2="null";
+                        String filename3="null";
+                        if(listFilePath.size()==1){
+                            filename0=filename+"_0.jpg";
+                        }else if(listFilePath.size()==2){
+                            filename0=filename+"_0.jpg";
+                            filename1=filename+"_1.jpg";
 
-                    }
-                    @Override
-                    public void onResponse(final User response) {
+                        }else if(listFilePath.size()==3){
+                            filename0=filename+"_0.jpg";
+                            filename1=filename+"_1.jpg";
+                            filename2=filename+"_2.jpg";
+                        }else if(listFilePath.size()==4){
+                            filename0=filename+"_0.jpg";
+                            filename1=filename+"_1.jpg";
+                            filename2=filename+"_2.jpg";
+                            filename3=filename+"_3.jpg";
+                        }
 
-                        new Thread(new Runnable() {
+                        String userid = Variable.user.getUserid()+"";
+                        String username = Variable.user.getUsername();
+                        String userphone = Variable.user.getUserphone();
+                        String usersex;
+                        if (Variable.user.isUsersex() == true)
+                            usersex = "1";
+                        else
+                            usersex = "0";
+                        String houselatitude = housesell_latitude+"";
+                        String houselongtitude = housesell_longitude+ "";
+                        OkHttpUtils.post().url(Variable.host+"/addHouseRent").addParams("housename",housesell_name.getText().toString())
+                                .addParams("housephoto0",filename0).addParams("housephoto1",filename1).addParams("housephoto2",filename2)
+                                .addParams("housephoto3",filename3).addParams("housedescription",housesell_description.getText().toString())
+                                .addParams("houseprovince",housesell_provice).addParams("housecity",housesell_city).addParams("housedistrict",housesell_district)
+                                .addParams("housestreet",housesell_street).addParams("houseshape",housesell_shape.getText().toString())
+                                .addParams("housearea",housesell_area.getText().toString()).addParams("houseprice",housesell_price.getText().toString())
+                                .addParams("houselatitude",houselatitude).addParams("houselongtitude",houselongtitude)
+                                .addParams("userid",userid).addParams("username",username)
+                                .addParams("userphone",userphone).addParams("usersex",usersex).build().execute(new Callback() {
                             @Override
-                            public void run() {
-                                String filename0="null";
-                                String filename1="null";
-                                String filename2="null";
-                                String filename3="null";
-                                if(listFilePath.size()==1){
-                                    filename0=filename+"_0.jpg";
-                                }else if(listFilePath.size()==2){
-                                    filename0=filename+"_0.jpg";
-                                    filename1=filename+"_1.jpg";
+                            public Object parseNetworkResponse(Response response) throws Exception {
+                                return null;
+                            }
 
-                                }else if(listFilePath.size()==3){
-                                    filename0=filename+"_0.jpg";
-                                    filename1=filename+"_1.jpg";
-                                    filename2=filename+"_2.jpg";
-                                }else if(listFilePath.size()==4){
-                                    filename0=filename+"_0.jpg";
-                                    filename1=filename+"_1.jpg";
-                                    filename2=filename+"_2.jpg";
-                                    filename3=filename+"_3.jpg";
-                                }
-
-                                String userid = response.getUserid()+"";
-                                String username = response.getUsername();
-                                String userphone = response.getUserphone();
-                                String usersex;
-                                if (response.isUsersex() == true)
-                                    usersex = "1";
-                                else
-                                    usersex = "0";
-                                String houselatitude = housesell_latitude+"";
-                                String houselongtitude = housesell_longitude+ "";
-                                OkHttpUtils.post().url(Variable.host+"/addHouseRent").addParams("housename",housesell_name.getText().toString())
-                                        .addParams("housephoto0",filename0).addParams("housephoto1",filename1).addParams("housephoto2",filename2)
-                                        .addParams("housephoto3",filename3).addParams("housedescription",housesell_description.getText().toString())
-                                        .addParams("houseprovince",housesell_provice).addParams("housecity",housesell_city).addParams("housedistrict",housesell_district)
-                                        .addParams("housestreet",housesell_street).addParams("houseshape",housesell_shape.getText().toString())
-                                        .addParams("housearea",housesell_area.getText().toString()).addParams("houseprice",housesell_price.getText().toString())
-                                        .addParams("houselatitude",houselatitude).addParams("houselongtitude",houselongtitude)
-                                        .addParams("userid",userid).addParams("username",username)
-                                        .addParams("userphone",userphone).addParams("usersex",usersex).build().execute(new Callback() {
-                                    @Override
-                                    public Object parseNetworkResponse(Response response) throws Exception {
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public void onError(Call call, Exception e) {
-
-                                    }
-
-                                    @Override
-                                    public void onResponse(Object response) {
-
-                                    }
-                                });
+                            @Override
+                            public void onError(Call call, Exception e) {
 
                             }
-                        }).start();
+
+                            @Override
+                            public void onResponse(Object response) {
+
+                            }
+                        });
+
                     }
-                });
+                }).start();
             }
-        }).start();
+        });
         Toast.makeText(this,"发布成功",Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -511,7 +500,7 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
                     housesell_provice = province.getName();
                     housesell_city = city.getName();
                     housesell_district = area.getName();
-                    housesell_street = detailed_area.toString();
+                    housesell_street = detailed_area.getText().toString();
                     select_area.setText(province.getName()+" "+city.getName()+" "+area.getName());
                     mCoder.geocode(new GeoCodeOption()
                             .city(city.getName())
@@ -522,7 +511,7 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
                 break;
         }
     }
-//http://api.map.baidu.com/geocoder/v2/?callback=renderOption&output=json&address=%E7%A6%8F%E5%BB%BA%E7%9C%81%E5%AE%81%E5%BE%B7%E5%B8%82%E9%9C%9E%E6%B5%A6%E5%8E%BF%E4%B8%89%E6%B2%99%E9%95%87%E5%8D%97%E7%82%AE%E5%8F%B024%E5%8F%B7&ak=orgi7hGIXqnEk1DZZ8g9trlQVe24fuy1&mcode=56:4A:20:30:05:82:06:F9:75:43:AA:62:8C:68:B8:C5:5B:E8:29:A5;com.example.a84045.lbstest1
+//http://api.map.baidu.com/geocoder/v2/?callback=renderOption&output=json&address=%&ak=orgi7hGIXqnEk1DZZ8g9trlQVe24fuy1&mcode=56:4A:20:30:05:82:06:F9:75:43:AA:62:8C:68:B8:C5:5B:E8:29:A5;com.example.a84045.lbstest1
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){

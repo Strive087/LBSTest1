@@ -1,8 +1,14 @@
 package com.example.a84045.lbstest1.Util;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,12 +27,18 @@ public class GsonUtil {
     }
 
     public static <T> List<T> changeGsonToList(String gsonString, Class<T> cls) {
-        Gson gson = new Gson();
-        List<T> list = gson.fromJson(gsonString, new TypeToken<List<T>>() {
-        }.getType());
-        return list;
-    }
+        List<T> lst = new ArrayList<>();
+        try {
+            JsonArray array = new JsonParser().parse(gsonString).getAsJsonArray();
+            for (final JsonElement elem : array) {
 
+                lst.add(new Gson().fromJson(elem, cls));
+            }
+        } catch (Exception e) {
+            Log.d("afasf",e.getMessage());
+        }
+        return lst;
+    }
 
     public static <T> List<Map<String, T>> changeGsonToListMaps(
             String gsonString) {

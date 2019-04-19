@@ -2,7 +2,7 @@ package com.example.a84045.lbstest1.Entity;
 
 import java.sql.Date;
 
-public class HouseRecord {
+public class HouseRecordEntity {
 
     private long recordid;
 

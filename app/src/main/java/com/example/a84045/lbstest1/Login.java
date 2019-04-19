@@ -15,7 +15,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a84045.lbstest1.Entity.User;
 import com.example.a84045.lbstest1.Global.Variable;
+import com.example.a84045.lbstest1.Util.GsonUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.io.IOException;
@@ -26,6 +28,8 @@ import okhttp3.Response;
 public class Login extends AppCompatActivity {
 
     private static final int GET_RESPONSE = 1;
+
+    private static final int GET_USER = 2;
 
     private static final int REQUEST_SIGNUP = 0;
 
@@ -58,6 +62,12 @@ public class Login extends AppCompatActivity {
                         onLoginFailed();
                     }
                     break;
+                case GET_USER:
+                    Bundle data1 = message.getData();
+                    String responseData1 = data1.getString("responseData");
+                    User user = GsonUtil.changeGsonToBean(responseData1,User.class);
+                    Variable.user = user;
+                    break;
                 default:
                     break;
 
@@ -87,8 +97,6 @@ public class Login extends AppCompatActivity {
                 startActivityForResult(intent,REQUEST_SIGNUP);
             }
         });
-
-
     }
 
     public void login(){
@@ -102,7 +110,6 @@ public class Login extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         final String email = emailText.getText().toString();
         final String password = passwordText.getText().toString();
-        Variable.usermail = email;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -139,6 +146,23 @@ public class Login extends AppCompatActivity {
     }
 
     public void onLoginSuccess(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response response = OkHttpUtils.post().url(Variable.host+"/getuserbymail").addParams("usermail",emailText.getText().toString()).build().execute();
+                    String responseData = response.body().string();
+                    Message message = new Message();
+                    message.what = GET_USER;
+                    Bundle data = new Bundle();
+                    data.putString("responseData" , responseData);
+                    message.setData(data);
+                    handler.sendMessage(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
         Toast.makeText(getBaseContext(),"login success",Toast.LENGTH_SHORT).show();
         loginButton.setEnabled(true);
         finish();

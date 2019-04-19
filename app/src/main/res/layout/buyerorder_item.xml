@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="房屋名称:"/>
+
+
+            <TextView
+                android:id="@+id/buyer_list_housename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="XXX"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="订单日期:"/>
+
+            <TextView
+                android:id="@+id/buyer_list_orderdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="XXXX-XX-XX XX:XX:XX"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:id="@+id/buyer_list_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:text="XXX XXX XXX XXXXXXXXXXX"/>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="房东:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/buyer_list_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="卖家姓名"/>
+
+        <TextView
+            android:layout_marginLeft="30dp"
+            android:text="电话:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/buyer_list_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="卖家电话"/>
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="总价:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/buyer_list_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="XXX.XX"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="时长："
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/buyer_list_orderday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="XX"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_gravity="right"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="订单状态:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/buyer_list_orderstatu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="XXXX"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <Button
+        android:layout_gravity="right"
+        android:id="@+id/buyer_list_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="取消订单"/>
+
+
+</LinearLayout>

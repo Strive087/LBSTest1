@@ -1,12 +1,10 @@
 package com.example.a84045.lbstest1.Entity;
 
-import java.sql.Date;
-
-public class HouseOrder {
+public class HouseOrderEntity {
 
     private long orderid;
 
-    private Date orderdate;
+    private String orderdate;
 
     private float orderprice;
 
@@ -20,7 +18,7 @@ public class HouseOrder {
 
     private String houseprovince;
 
-    private String housecty;
+    private String housecity;
 
     private String housedistrict;
 
@@ -46,11 +44,11 @@ public class HouseOrder {
         this.orderid = orderid;
     }
 
-    public Date getOrderdate() {
+    public String getOrderdate() {
         return orderdate;
     }
 
-    public void setOrderdate(Date orderdate) {
+    public void setOrderdate(String orderdate) {
         this.orderdate = orderdate;
     }
 
@@ -102,12 +100,12 @@ public class HouseOrder {
         this.houseprovince = houseprovince;
     }
 
-    public String getHousecty() {
-        return housecty;
+    public String getHousecity() {
+        return housecity;
     }
 
-    public void setHousecty(String housecty) {
-        this.housecty = housecty;
+    public void setHousecity(String housecity) {
+        this.housecity = housecity;
     }
 
     public String getHousedistrict() {
