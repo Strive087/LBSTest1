@@ -1,8 +1,10 @@
 package com.example.a84045.lbstest1.Entity;
 
+import org.litepal.crud.LitePalSupport;
+
 import java.sql.Date;
 
-public class HouseRecordEntity {
+public class HouseRecordEntity extends LitePalSupport {
 
     private long recordid;
 

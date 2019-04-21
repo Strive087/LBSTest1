@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -23,6 +25,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -43,6 +46,7 @@ import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.example.a84045.lbstest1.Entity.HouseRent;
 import com.example.a84045.lbstest1.Entity.User;
 import com.example.a84045.lbstest1.Global.Variable;
 import com.example.a84045.lbstest1.Util.BitmapUtil;
@@ -51,6 +55,7 @@ import com.lljjcoder.style.citylist.utils.CityListLoader;
 import com.lljjcoder.style.citythreelist.CityBean;
 import com.lljjcoder.style.citythreelist.ProvinceActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.Callback;
 
 import java.io.File;
@@ -127,7 +132,15 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
 
     String filename;
 
-    ArrayList<String> listFilePath=new ArrayList<>();
+    ArrayList<String> listFilePath=new ArrayList<String>(){{
+       add("null");add("null");add("null");add("null");
+    }};
+
+    private SharedPreferences preferences;
+
+    public static boolean UPDATE_HOUSE_SELL = false;
+
+    private HouseRent mhouseRent;
 
     public abstract class UserCallback extends Callback<User>
     {
@@ -144,6 +157,7 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_house_sell);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         toolbar = findViewById(R.id.housesell_toolbar);
         housesell_name = findViewById(R.id.housesell_name);
         housesell_description = findViewById(R.id.housesell_discription);
@@ -221,7 +235,55 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
                 }
             }
         });
-        select_location.setChecked(isChecked);
+        Intent intent = getIntent();
+        if (intent.getSerializableExtra("houserent") != null){
+            final HouseRent houseRent = (HouseRent) intent.getSerializableExtra("houserent");
+            mhouseRent = houseRent;
+            housesell_name.setText(houseRent.getHousename());
+            housesell_description.setText(houseRent.getHousedescription());
+            housesell_shape.setText(houseRent.getHouseshape());
+            housesell_price.setText(houseRent.getHouseprice()+"");
+            housesell_area.setText(houseRent.getHousearea());
+            housesell_provice = houseRent.getHouseprovince();
+            housesell_city = houseRent.getHousecity();
+            housesell_district = houseRent.getHousedistrict();
+            housesell_street = houseRent.getHousestreet();
+            select_area.setText(houseRent.getHouseprovince()+" "+houseRent.getHousecity()+" "+houseRent.getHousedistrict());
+            detailed_area.setText(houseRent.getHousestreet());
+            UPDATE_HOUSE_SELL = true;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    List<String> photoList = new ArrayList<>();
+                    photoList.add(houseRent.getHousephoto0());
+                    photoList.add(houseRent.getHousephoto1());
+                    photoList.add(houseRent.getHousephoto2());
+                    photoList.add(houseRent.getHousephoto3());
+                    for (String filename : photoList){
+                        if(!filename.equals("null")){
+                           OkHttpUtils.get().url(Variable.host+"/downloadImage")
+                                    .addParams("usermail",preferences.getString("mail",""))
+                                    .addParams("imageName",filename).build().execute(new BitmapCallback() {
+                               @Override
+                               public void onError(Call call, Exception e) {
+
+                               }
+
+                               @Override
+                               public void onResponse(Bitmap response) {
+                                   showSumPhoto(response);
+                               }
+                           });
+
+                        }
+                    }
+
+                }
+            }).start();
+            select_location.setChecked(!isChecked);
+        }else{
+            select_location.setChecked(isChecked);
+        }
     }
 
     @Override
@@ -262,6 +324,7 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
         }
     }
 
+
     private void CommitForm(){
         Calendar calendar = Calendar.getInstance();
         int month = calendar.get(Calendar.MONTH)+1;
@@ -275,10 +338,12 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
                 List<File> files = new ArrayList<>();
                 int num = 0;
                 for(String path : listFilePath){
-                    String suffixName = path.substring(path.lastIndexOf("."));
-                    File file = new File(BitmapUtil.compressImage(path,getExternalCacheDir()+"/"+ Variable.user.getUsermail()+"_photo"+num+suffixName));
-                    files.add(file);
-                    num++;
+                    if(!path.equals("null")){
+                        String suffixName = path.substring(path.lastIndexOf("."));
+                        File file = new File(BitmapUtil.compressImage(path,getExternalCacheDir()+"/"+ preferences.getString("mail","")+"_photo"+num+suffixName));
+                        files.add(file);
+                        num++;
+                    }
                 }
                 return files;
             }
@@ -291,7 +356,7 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
                         for (int num = 0 ; files.size() > num ; num++){
                             String filename1 = filename+"_"+num+".jpg";
                             OkHttpUtils.post().addFile("file",filename1,files.get(num))
-                                    .addParams("usermail",Variable.user.getUsermail()).url(Variable.host+"/uploadImage").build().execute(new Callback() {
+                                    .addParams("usermail",preferences.getString("mail","")).url(Variable.host+"/uploadImage").build().execute(new Callback() {
                                 @Override
                                 public Object parseNetworkResponse(Response response) throws Exception {
                                     return null;
@@ -299,6 +364,7 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
 
                                 @Override
                                 public void onError(Call call, Exception e) {
+
                                 }
 
                                 @Override
@@ -314,69 +380,92 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
         new Thread(new Runnable() {
             @Override
             public void run() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String filename0="null";
-                        String filename1="null";
-                        String filename2="null";
-                        String filename3="null";
-                        if(listFilePath.size()==1){
-                            filename0=filename+"_0.jpg";
-                        }else if(listFilePath.size()==2){
-                            filename0=filename+"_0.jpg";
-                            filename1=filename+"_1.jpg";
-
-                        }else if(listFilePath.size()==3){
-                            filename0=filename+"_0.jpg";
-                            filename1=filename+"_1.jpg";
-                            filename2=filename+"_2.jpg";
-                        }else if(listFilePath.size()==4){
-                            filename0=filename+"_0.jpg";
-                            filename1=filename+"_1.jpg";
-                            filename2=filename+"_2.jpg";
-                            filename3=filename+"_3.jpg";
+                String filename0="null";
+                String filename1="null";
+                String filename2="null";
+                String filename3="null";
+                if(!listFilePath.get(0).equals("null")){
+                    filename0=filename+"_0.jpg";
+                }
+                if(!listFilePath.get(1).equals("null")){
+                    filename1=filename+"_1.jpg";
+                }
+                if(!listFilePath.get(2).equals("null")){
+                    filename2=filename+"_2.jpg";
+                }
+                if(!listFilePath.get(3).equals("null")){
+                    filename3=filename+"_3.jpg";
+                }
+                String userid = preferences.getString("id","");
+                String username = preferences.getString("name","");
+                String userphone = preferences.getString("phone","");
+                String usersex;
+                if (preferences.getString("sex","").equals(true))
+                    usersex = "1";
+                else
+                    usersex = "0";
+                String houselatitude = housesell_latitude+"";
+                String houselongtitude = housesell_longitude+ "";
+                if (UPDATE_HOUSE_SELL){
+                    if(filename0.equals("null"))
+                        filename0 = mhouseRent.getHousephoto0();
+                    if(filename1.equals("null"))
+                        filename1 = mhouseRent.getHousephoto1();
+                    if(filename2.equals("null"))
+                        filename2 = mhouseRent.getHousephoto2();
+                    if(filename3.equals("null"))
+                        filename3 = mhouseRent.getHousephoto3();
+                    Log.d("adfa",filename0);
+                    OkHttpUtils.post().url(Variable.host+ "/updateHouseRent").addParams("housename",housesell_name.getText().toString())
+                            .addParams("housephoto0",filename0).addParams("housephoto1",filename1).addParams("housephoto2",filename2)
+                            .addParams("housephoto3",filename3).addParams("housedescription",housesell_description.getText().toString())
+                            .addParams("houseprovince",housesell_provice).addParams("housecity",housesell_city).addParams("housedistrict",housesell_district)
+                            .addParams("housestreet",housesell_street).addParams("houseshape",housesell_shape.getText().toString())
+                            .addParams("housearea",housesell_area.getText().toString()).addParams("houseprice",housesell_price.getText().toString())
+                            .addParams("houselatitude",houselatitude).addParams("houselongtitude",houselongtitude)
+                            .addParams("userid",userid).addParams("username",username).addParams("houseid",mhouseRent.getHouseid()+"")
+                            .addParams("userphone",userphone).addParams("usersex",usersex).build().execute(new Callback() {
+                        @Override
+                        public Object parseNetworkResponse(Response response) throws Exception {
+                            return null;
                         }
 
-                        String userid = Variable.user.getUserid()+"";
-                        String username = Variable.user.getUsername();
-                        String userphone = Variable.user.getUserphone();
-                        String usersex;
-                        if (Variable.user.isUsersex() == true)
-                            usersex = "1";
-                        else
-                            usersex = "0";
-                        String houselatitude = housesell_latitude+"";
-                        String houselongtitude = housesell_longitude+ "";
-                        OkHttpUtils.post().url(Variable.host+"/addHouseRent").addParams("housename",housesell_name.getText().toString())
-                                .addParams("housephoto0",filename0).addParams("housephoto1",filename1).addParams("housephoto2",filename2)
-                                .addParams("housephoto3",filename3).addParams("housedescription",housesell_description.getText().toString())
-                                .addParams("houseprovince",housesell_provice).addParams("housecity",housesell_city).addParams("housedistrict",housesell_district)
-                                .addParams("housestreet",housesell_street).addParams("houseshape",housesell_shape.getText().toString())
-                                .addParams("housearea",housesell_area.getText().toString()).addParams("houseprice",housesell_price.getText().toString())
-                                .addParams("houselatitude",houselatitude).addParams("houselongtitude",houselongtitude)
-                                .addParams("userid",userid).addParams("username",username)
-                                .addParams("userphone",userphone).addParams("usersex",usersex).build().execute(new Callback() {
-                            @Override
-                            public Object parseNetworkResponse(Response response) throws Exception {
-                                return null;
-                            }
+                        @Override
+                        public void onError(Call call, Exception e) {
+                        }
 
-                            @Override
-                            public void onError(Call call, Exception e) {
+                        @Override
+                        public void onResponse(Object response) {
 
-                            }
+                        }
+                    });
+                } else {
+                    OkHttpUtils.post().url(Variable.host+ "/addHouseRent").addParams("housename",housesell_name.getText().toString())
+                            .addParams("housephoto0",filename0).addParams("housephoto1",filename1).addParams("housephoto2",filename2)
+                            .addParams("housephoto3",filename3).addParams("housedescription",housesell_description.getText().toString())
+                            .addParams("houseprovince",housesell_provice).addParams("housecity",housesell_city).addParams("housedistrict",housesell_district)
+                            .addParams("housestreet",housesell_street).addParams("houseshape",housesell_shape.getText().toString())
+                            .addParams("housearea",housesell_area.getText().toString()).addParams("houseprice",housesell_price.getText().toString())
+                            .addParams("houselatitude",houselatitude).addParams("houselongtitude",houselongtitude)
+                            .addParams("userid",userid).addParams("username",username)
+                            .addParams("userphone",userphone).addParams("usersex",usersex).build().execute(new Callback() {
+                        @Override
+                        public Object parseNetworkResponse(Response response) throws Exception {
+                            return null;
+                        }
 
-                            @Override
-                            public void onResponse(Object response) {
+                        @Override
+                        public void onError(Call call, Exception e) {
+                        }
 
-                            }
-                        });
+                        @Override
+                        public void onResponse(Object response) {
 
-                    }
-                }).start();
+                        }
+                    });
+                }
             }
-        });
+        }).start();
         Toast.makeText(this,"发布成功",Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -438,29 +527,13 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
 
     private void addFile(String path){
         if(NUM_PHOTO == 1){
-            if(listFilePath.size() == 0){
-                listFilePath.add(0,path);
-            }else {
-                listFilePath.set(0,path);
-            }
+            listFilePath.set(0,path);
         }else if(NUM_PHOTO == 2 ){
-            if(listFilePath.size() == 1){
-                listFilePath.add(1,path);
-            }else {
-                listFilePath.set(1,path);
-            }
+            listFilePath.set(1,path);
         }else if(NUM_PHOTO == 3 ){
-            if(listFilePath.size() == 2){
-                listFilePath.add(2,path);
-            }else {
-                listFilePath.set(2,path);
-            }
+            listFilePath.set(2,path);
         }else {
-            if(listFilePath.size() == 3){
-                listFilePath.add(3,path);
-            }else {
-                listFilePath.set(3,path);
-            }
+            listFilePath.set(3,path);
         }
     }
 
@@ -511,7 +584,7 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
                 break;
         }
     }
-//http://api.map.baidu.com/geocoder/v2/?callback=renderOption&output=json&address=%&ak=orgi7hGIXqnEk1DZZ8g9trlQVe24fuy1&mcode=56:4A:20:30:05:82:06:F9:75:43:AA:62:8C:68:B8:C5:5B:E8:29:A5;com.example.a84045.lbstest1
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){

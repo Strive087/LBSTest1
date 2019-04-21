@@ -28,10 +28,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="观房记录"
+            android:text="我的发布"
             android:textColor="#000"
             android:textSize="20dp" />
 
     </android.support.v7.widget.Toolbar>
+
+    <ListView
+        android:id="@+id/myrent_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>
 
 </LinearLayout>

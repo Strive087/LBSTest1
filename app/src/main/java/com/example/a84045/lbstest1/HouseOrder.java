@@ -1,8 +1,9 @@
 package com.example.a84045.lbstest1;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,8 +24,6 @@ import okhttp3.Response;
 
 public class HouseOrder extends AppCompatActivity implements View.OnClickListener{
 
-
-
     public abstract class HouseOrderCallback extends Callback<List<HouseOrderEntity>>
     {
         @Override
@@ -41,10 +40,13 @@ public class HouseOrder extends AppCompatActivity implements View.OnClickListene
 
     private ListView orderlist;
 
+    private SharedPreferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_house_order);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         buyerorder = findViewById(R.id.buyer_order);
         sellerorder = findViewById(R.id.seller_order);
         buyerorder.setOnClickListener(this);
@@ -71,7 +73,7 @@ public class HouseOrder extends AppCompatActivity implements View.OnClickListene
     }
 
     public void getBuyerOrder(){
-        OkHttpUtils.post().url(Variable.host+"/getHouseOrderByBuyerid").addParams("buyerid",Variable.user.getUserid()+"")
+        OkHttpUtils.post().url(Variable.host+"/getHouseOrderByBuyerid").addParams("buyerid",preferences.getString("id",""))
                 .build().execute(new HouseOrderCallback() {
             @Override
             public void onError(Call call, Exception e) {
@@ -83,13 +85,12 @@ public class HouseOrder extends AppCompatActivity implements View.OnClickListene
                 BuyerOrderAdapter adapter = new BuyerOrderAdapter(HouseOrder.this,R.layout.buyerorder_item,response);
                 orderlist= findViewById(R.id.order_list);
                 orderlist.setAdapter(adapter);
-                Log.d("dasfa","Sdf");
             }
         });
     }
 
     public void getSellerOrder(){
-        OkHttpUtils.post().url(Variable.host+"/getHouseOrderBySellerid").addParams("sellerid",Variable.user.getUserid()+"")
+        OkHttpUtils.post().url(Variable.host+"/getHouseOrderBySellerid").addParams("sellerid",preferences.getString("id",""))
                 .build().execute(new HouseOrderCallback() {
             @Override
             public void onError(Call call, Exception e) {

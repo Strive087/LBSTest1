@@ -14,9 +14,9 @@
         android:title="历史订单"></item>
 
     <item
-        android:id="@+id/nav_record"
+        android:id="@+id/nav_sell"
         android:icon="@drawable/nav_record"
-        android:title="观房记录"></item>
+        android:title="我的发布"></item>
 
     <item
         android:id="@+id/nav_call"

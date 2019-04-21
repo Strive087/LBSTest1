@@ -1,15 +1,18 @@
 package com.example.a84045.lbstest1;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -43,6 +46,12 @@ public class Login extends AppCompatActivity {
 
     ProgressBar progressBar;
 
+    CheckBox savePsd;
+
+    private SharedPreferences.Editor editor;
+
+    private SharedPreferences preferences;
+
     private Handler handler = new Handler(){
         public void handleMessage(Message message){
             switch (message.what){
@@ -66,7 +75,15 @@ public class Login extends AppCompatActivity {
                     Bundle data1 = message.getData();
                     String responseData1 = data1.getString("responseData");
                     User user = GsonUtil.changeGsonToBean(responseData1,User.class);
-                    Variable.user = user;
+                    editor = preferences.edit();
+                    editor.putBoolean("savepsd",savePsd.isChecked());
+                    editor.putString("name",user.getUsername());
+                    editor.putString("mail",user.getUsermail());
+                    editor.putString("psd",user.getUserpassword());
+                    editor.putString("phone",user.getUserphone());
+                    editor.putString("sex",user.isUsersex()+"");
+                    editor.putString("id",user.getUserid()+"");
+                    editor.apply();
                     break;
                 default:
                     break;
@@ -79,11 +96,21 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         emailText = findViewById(R.id.login_email);
         passwordText = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.btn_login);
         signupLink = findViewById(R.id.link_signup);
         progressBar = findViewById(R.id.login_progress);
+        savePsd = findViewById(R.id.save_psd);
+        boolean isSavePsd = preferences.getBoolean("savepsd",false);
+        if (isSavePsd){
+            String mail = preferences.getString("mail","");
+            String psd = preferences.getString("psd","");
+            emailText.setText(mail);
+            passwordText.setText(psd);
+            savePsd.setChecked(true);
+        }
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

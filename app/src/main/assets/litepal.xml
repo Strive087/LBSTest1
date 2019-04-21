@@ -4,6 +4,6 @@
     <version value="1"></version>
 
     <list>
-        <mapping class="com.example.a84045.lbstest1.SellerInfo"></mapping>
+        <mapping class="com.example.a84045.lbstest1.Entity.HouseRecordEntity"></mapping>
     </list>
 </litepal>

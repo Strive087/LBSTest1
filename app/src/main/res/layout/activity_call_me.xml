@@ -35,4 +35,43 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/callme_icon"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/pig"/>
+
+        <TextView
+            android:id="@+id/callme_mail"
+            android:layout_gravity="center"
+            android:layout_marginTop="70dp"
+            android:text="开发者邮箱:2471749097@qq.com"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="16sp"
+            android:textColor="#222"/>
+
+        <TextView
+            android:id="@+id/callme_phone"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="开发者电话:15797716516"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="16sp"
+            android:textColor="#222"/>
+
+    </LinearLayout>
+
+
+
 </LinearLayout>

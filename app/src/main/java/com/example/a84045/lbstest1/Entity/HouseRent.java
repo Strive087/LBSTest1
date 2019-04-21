@@ -1,6 +1,8 @@
 package com.example.a84045.lbstest1.Entity;
 
-public class HouseRent {
+import java.io.Serializable;
+
+public class HouseRent implements Serializable {
 
     private long houseid;
 

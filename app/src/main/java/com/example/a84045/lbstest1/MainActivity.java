@@ -4,12 +4,14 @@ package com.example.a84045.lbstest1;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -100,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private String housemasterphone;
 
+    private SharedPreferences preferences;
+
     public abstract class HouseRentCallback extends Callback<List<HouseRent>>
     {
         @Override
@@ -116,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SDKInitializer.initialize(getApplicationContext());
         SDKInitializer.setCoordType(CoordType.BD09LL);
         setContentView(R.layout.activity_main);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         List<String> permissionList = new ArrayList<>();
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -232,8 +237,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case R.id.nav_order:
                         intent = new Intent(getApplicationContext(),HouseOrder.class);
                         break;
-                    case R.id.nav_record:
-                        intent = new Intent(getApplicationContext(),HouseRecord.class);
+                    case R.id.nav_sell:
+                        intent = new Intent(getApplicationContext(),MyhouseRent.class);
                         break;
                     default:
                         intent = new Intent(getApplicationContext(),CallMe.class);
@@ -324,8 +329,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final ImageView housephoto1 = contentView.findViewById(R.id.house_photo1);
         final ImageView housephoto2 = contentView.findViewById(R.id.house_photo2);
         final ImageView housephoto3 = contentView.findViewById(R.id.house_photo3);
+        String mail = preferences.getString("mail","");
         if(!houseRent.getHousephoto0().equals("null")){
-            OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",Variable.user.getUsermail())
+            OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",mail)
                     .addParams("imageName",houseRent.getHousephoto0()).build().execute(new BitmapCallback() {
                         @Override
                         public void onError(Call call, Exception e) {
@@ -338,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     });
             if(!houseRent.getHousephoto1().equals("null")){
-                OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",Variable.user.getUsermail())
+                OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",mail)
                         .addParams("imageName",houseRent.getHousephoto1()).build().execute(new BitmapCallback() {
                     @Override
                     public void onError(Call call, Exception e) {
@@ -351,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
                 if(!houseRent.getHousephoto2().equals("null")){
-                    OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",Variable.user.getUsermail())
+                    OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",mail)
                             .addParams("imageName",houseRent.getHousephoto2()).build().execute(new BitmapCallback() {
                         @Override
                         public void onError(Call call, Exception e) {
@@ -364,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     });
                     if(!houseRent.getHousephoto3().equals("null")){
-                        OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",Variable.user.getUsermail())
+                        OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",mail)
                                 .addParams("imageName",houseRent.getHousephoto3()).build().execute(new BitmapCallback() {
                             @Override
                             public void onError(Call call, Exception e) {
@@ -491,7 +497,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this,"必须同意所有权限才能使用本程序",Toast.LENGTH_SHORT).show();
                         return;
                     }else{
-                        Intent intent=new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+housemasterphone));
+                        Intent intent=new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+housemasterphone));
                         startActivity(intent);
                     }
                 }else{
@@ -530,7 +536,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CALL_PHONE},2);
                 }else{
-                    Intent intent=new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+housemasterphone));
+                    Intent intent=new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+housemasterphone));
                     startActivity(intent);
                 }
                 break;
@@ -567,8 +573,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     .addParams("housecity",houseRent.getHousecity()).addParams("housedistrict",houseRent.getHousedistrict())
                                     .addParams("housestreet",houseRent.getHousestreet()).addParams("sellerid",houseRent.getUserid()+"")
                                     .addParams("sellerphone",houseRent.getUserphone()).addParams("sellername",houseRent.getUsername())
-                                    .addParams("buyerid",Variable.user.getUserid()+"").addParams("buyername",Variable.user.getUsername())
-                                    .addParams("buyerphone",Variable.user.getUserphone()).build().execute(new Callback() {
+                                    .addParams("buyerid",preferences.getString("userid",""))
+                                    .addParams("buyername",preferences.getString("name",""))
+                                    .addParams("buyerphone",preferences.getString("phone","")).build().execute(new Callback() {
                                 @Override
                                 public Object parseNetworkResponse(Response response) throws Exception {
                                     return null;
