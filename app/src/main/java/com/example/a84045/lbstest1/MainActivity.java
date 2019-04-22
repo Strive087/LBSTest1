@@ -518,6 +518,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.message:
                 break;
             case R.id.search:
+                Intent intent = new Intent(this,SearchHouse.class);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -573,7 +575,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     .addParams("housecity",houseRent.getHousecity()).addParams("housedistrict",houseRent.getHousedistrict())
                                     .addParams("housestreet",houseRent.getHousestreet()).addParams("sellerid",houseRent.getUserid()+"")
                                     .addParams("sellerphone",houseRent.getUserphone()).addParams("sellername",houseRent.getUsername())
-                                    .addParams("buyerid",preferences.getString("userid",""))
+                                    .addParams("buyerid",preferences.getString("id",""))
                                     .addParams("buyername",preferences.getString("name",""))
                                     .addParams("buyerphone",preferences.getString("phone","")).build().execute(new Callback() {
                                 @Override

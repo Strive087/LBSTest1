@@ -53,7 +53,10 @@ public class MyhouseRent extends AppCompatActivity implements MyHouseRentAdapter
         setContentView(R.layout.activity_myhouse_rent);
         myrentlist= findViewById(R.id.myrent_list);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.d("fadf",preferences.getAll().toString());
+        getHouseRent();
+    }
+
+    public void getHouseRent(){
         OkHttpUtils.post().url(Variable.host+"/getAllHouseRentByUserid")
                 .addParams("userid",preferences.getString("id", ""))
                 .build().execute(new HouseRentCallback() {
@@ -95,6 +98,8 @@ public class MyhouseRent extends AppCompatActivity implements MyHouseRentAdapter
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode){
             case 1:
+                if(resultCode == RESULT_OK)
+                    getHouseRent();
                 break;
         }
     }

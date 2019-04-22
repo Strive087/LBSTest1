@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="price">
+        <item>0-999</item>
+        <item>1000-1999</item>
+        <item>2000-2999</item>
+        <item>3000-3999</item>
+        <item>4000以上</item>
+        <item>全部</item>
+    </string-array>
+    <string-array name="area">
+        <item>0-29</item>
+        <item>30-59</item>
+        <item>60-89</item>
+        <item>90-119</item>
+        <item>120以上</item>
+        <item>全部</item>
+    </string-array>
+</resources>

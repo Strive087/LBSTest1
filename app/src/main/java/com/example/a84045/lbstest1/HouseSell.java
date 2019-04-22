@@ -436,7 +436,9 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
 
                         @Override
                         public void onResponse(Object response) {
-
+                            Toast.makeText(HouseSell.this,"发布成功",Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                            finish();
                         }
                     });
                 } else {
@@ -460,14 +462,13 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
 
                         @Override
                         public void onResponse(Object response) {
-
+                            Toast.makeText(HouseSell.this,"发布成功",Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     });
                 }
             }
         }).start();
-        Toast.makeText(this,"发布成功",Toast.LENGTH_SHORT).show();
-        finish();
     }
 
     private void SelectArea(){
