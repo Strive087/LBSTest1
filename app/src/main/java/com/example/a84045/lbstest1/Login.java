@@ -44,6 +44,8 @@ public class Login extends AppCompatActivity {
 
     TextView signupLink;
 
+    TextView admin ;
+
     ProgressBar progressBar;
 
     CheckBox savePsd;
@@ -103,6 +105,7 @@ public class Login extends AppCompatActivity {
         signupLink = findViewById(R.id.link_signup);
         progressBar = findViewById(R.id.login_progress);
         savePsd = findViewById(R.id.save_psd);
+        admin = findViewById(R.id.admin);
         boolean isSavePsd = preferences.getBoolean("savepsd",false);
         if (isSavePsd){
             String mail = preferences.getString("mail","");
@@ -122,6 +125,14 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),Signup.class);
                 startActivityForResult(intent,REQUEST_SIGNUP);
+            }
+        });
+        admin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),AdminLogin.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
