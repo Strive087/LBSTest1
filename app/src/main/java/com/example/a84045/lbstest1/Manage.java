@@ -84,7 +84,7 @@ public class Manage extends AppCompatActivity implements View.OnClickListener{
                 rentmanage.setBackgroundResource(R.color.colorUnConfirm);
                 break;
             case R.id.fab:
-                Intent intent = new Intent(this,Signup.class);
+                Intent intent = new Intent(this,AdminAddUser.class);
                 startActivity(intent);
                 break;
             default:

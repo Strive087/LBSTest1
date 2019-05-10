@@ -65,7 +65,7 @@
             android:textColor="#000"
             android:textSize="16dp"
             android:background="#e6e6e6"
-            android:text="出租管理"/>
+            android:text="房源管理"/>
 
         <View
             android:layout_width="1dip"
@@ -82,7 +82,7 @@
             android:textColor="#000"
             android:textSize="16dp"
             android:background="#e6e6e6"
-            android:text="订单管理"/>
+            android:text="统计信息"/>
 
     </LinearLayout>
 
