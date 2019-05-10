@@ -1,6 +1,7 @@
 package com.example.a84045.lbstest1;
 
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import okhttp3.Response;
 
 public class Manage extends AppCompatActivity implements View.OnClickListener{
 
+    final static int ADD_SUCCESS = 1;
+
     private TextView usermanage;
 
     private TextView rentmanage;
@@ -43,7 +46,6 @@ public class Manage extends AppCompatActivity implements View.OnClickListener{
         public List<User> parseNetworkResponse(Response response) throws IOException
         {
             String string = response.body().string();
-            Log.d("Fafa",string);
             return GsonUtil.changeGsonToList(string,User.class);
         }
     }
@@ -85,7 +87,7 @@ public class Manage extends AppCompatActivity implements View.OnClickListener{
                 break;
             case R.id.fab:
                 Intent intent = new Intent(this,AdminAddUser.class);
-                startActivity(intent);
+                startActivityForResult(intent,ADD_SUCCESS);
                 break;
             default:
                 break;
@@ -100,11 +102,18 @@ public class Manage extends AppCompatActivity implements View.OnClickListener{
 
             @Override
             public void onResponse(List<User> response) {
-
                 UserAdapter adapter = new UserAdapter(response,Manage.this);
                 managelist.setAdapter(adapter);
             }
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == ADD_SUCCESS){
+            if(resultCode == RESULT_OK){
+                getuser();
+            }
+        }
+    }
 }

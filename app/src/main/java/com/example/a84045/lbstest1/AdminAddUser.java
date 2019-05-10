@@ -79,7 +79,8 @@ public class AdminAddUser extends AppCompatActivity {
 
                     @Override
                     public void onResponse(Object response) {
-
+                        setResult(RESULT_OK,null);
+                        finish();
                     }
                 });
 
