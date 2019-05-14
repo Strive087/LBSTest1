@@ -41,6 +41,7 @@ public class AdminLogin extends AppCompatActivity {
                 if(validate()){
                     Intent intent = new Intent(getApplicationContext(),Manage.class);
                     startActivity(intent);
+                    finish();
                 }else{
                     Toast.makeText(AdminLogin.this,"admin login failed",Toast.LENGTH_SHORT).show();
                 }

@@ -95,21 +95,86 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/manage_list"
+        <FrameLayout
+            android:id="@+id/manage_page1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </ListView>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:src="@drawable/add"/>
+            <ListView
+                android:id="@+id/manage_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </ListView>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                android:src="@drawable/add"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:visibility="gone"
+            android:id="@+id/manage_page2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/manage_list_rent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></ListView>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_rent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                android:src="@drawable/add"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/manage_page3"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/manage_user_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_margin="20dp"
+                android:text="用户人数："/>
+
+            <TextView
+                android:id="@+id/manage_rent_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_margin="20dp"
+                android:text="房源数量："/>
+
+            <TextView
+                android:id="@+id/manage_order_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_margin="20dp"
+                android:text="订单数量："/>
+
+        </LinearLayout>
+
 
     </FrameLayout>
+
+
 
 
 

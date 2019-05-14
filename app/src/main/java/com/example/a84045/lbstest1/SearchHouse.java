@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -47,6 +50,8 @@ public class SearchHouse extends AppCompatActivity implements SearchHouseAdapter
 
     private Spinner spinnerarea;
 
+    Toolbar toolbar;
+
     int lowprice = 0;
 
     int upprice = 0;
@@ -54,6 +59,7 @@ public class SearchHouse extends AppCompatActivity implements SearchHouseAdapter
     int lowarea = 0;
 
     int uparea = 0;
+
 
     public abstract class HouseRentCallback extends Callback<List<HouseRent>>
     {
@@ -73,6 +79,7 @@ public class SearchHouse extends AppCompatActivity implements SearchHouseAdapter
         mListView =findViewById(R.id.searchListView);
         spinnerprice =findViewById(R.id.spinner_price);
         spinnerarea = findViewById(R.id.spinner_area);
+        toolbar = findViewById(R.id.searchhouse_toolbar);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         mSearchView.setIconified(false);
         mSearchView.setIconifiedByDefault(false);
@@ -80,6 +87,21 @@ public class SearchHouse extends AppCompatActivity implements SearchHouseAdapter
         mSearchView.setSubmitButtonEnabled(true);
         spinnerprice.setSelection(5,true);
         spinnerarea.setSelection(5,true);
+        ActionMenuView actionMenuView = (ActionMenuView) toolbar.findViewById(R.id.action_menu_view);
+        getMenuInflater().inflate(R.menu.housesell_toolbar, actionMenuView.getMenu());
+        actionMenuView.setOnMenuItemClickListener(new ActionMenuView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.back:
+                        finish();
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
         getAllHouseRent();
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

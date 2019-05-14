@@ -281,7 +281,9 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
                 }
             }).start();
             select_location.setChecked(!isChecked);
-        }else{
+        }else if (intent.getBooleanExtra("manage",false ) == true) {
+            select_location.setVisibility(View.GONE);
+        }else {
             select_location.setChecked(isChecked);
         }
     }
@@ -463,6 +465,7 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
                         @Override
                         public void onResponse(Object response) {
                             Toast.makeText(HouseSell.this,"发布成功",Toast.LENGTH_SHORT).show();
+                            setResult(666);
                             finish();
                         }
                     });

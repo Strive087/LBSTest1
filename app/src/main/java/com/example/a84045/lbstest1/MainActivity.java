@@ -518,7 +518,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.message:
                 break;
             case R.id.search:
-                Intent intent = new Intent(this,SearchHouse.class);
+                Intent intent = new Intent(getApplicationContext(),SearchHouse.class);
                 startActivity(intent);
                 break;
             default:
