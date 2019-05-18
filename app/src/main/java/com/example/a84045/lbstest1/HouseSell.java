@@ -319,7 +319,9 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
                 SelectArea();
                 break;
             case R.id.housesell_commit:
-                CommitForm();
+                if (validate()){
+                    CommitForm();
+                }
                 break;
             default:
                 break;
@@ -715,5 +717,34 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
         choose_from_album = contentView.findViewById(R.id.choose_from_album);
         take_photo.setOnClickListener(this);
         choose_from_album.setOnClickListener(this);
+    }
+
+    private boolean validate(){
+        boolean flag = true;
+        if(housesell_name.getText().toString().equals("")){
+            housesell_name.setError("不可为空");
+            flag = false;
+        }
+        if(housesell_description.getText().toString().equals("")){
+            housesell_description.setError("不可为空");
+            flag = false;
+        }
+        if(housesell_shape.getText().toString().equals("")){
+            housesell_shape.setError("不可为空");
+            flag = false;
+        }
+        if(housesell_price.getText().toString().equals("")){
+            housesell_price.setError("不可为空");
+            flag = false;
+        }
+        if(housesell_area.getText().toString().equals("")){
+            housesell_area.setError("不可为空");
+            flag = false;
+        }
+        if(detailed_area.getText().toString().equals("")){
+            detailed_area.setError("不可为空");
+            flag = false;
+        }
+        return flag;
     }
 }

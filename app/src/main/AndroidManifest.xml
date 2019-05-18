@@ -28,7 +28,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AdminAddUser"></activity>
+        <activity android:name=".Welcome1"></activity>
+        <activity android:name=".AdminAddUser" />
         <activity android:name=".Manage" />
         <activity android:name=".AdminLogin" />
         <activity android:name=".SearchHouse" />
