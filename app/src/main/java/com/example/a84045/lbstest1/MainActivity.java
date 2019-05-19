@@ -330,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView housearea = contentView.findViewById(R.id.house_area);
         housearea.setText(houseRent.getHousearea()+" 平方米");
         TextView housemaster = contentView.findViewById(R.id.house_master);
-        if(houseRent.getUsersex().equals("1") || houseRent.getUsersex().equals("true")){
+        if(houseRent.getUsersex().equals("1") || houseRent.getUsersex().equals(true)){
             housemaster.setText(houseRent.getUsername()+" (男)");
         }else{
             housemaster.setText(houseRent.getUsername()+" (女)");
@@ -339,9 +339,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final ImageView housephoto1 = contentView.findViewById(R.id.house_photo1);
         final ImageView housephoto2 = contentView.findViewById(R.id.house_photo2);
         final ImageView housephoto3 = contentView.findViewById(R.id.house_photo3);
-        String mail = preferences.getString("mail","");
+        String id = houseRent.getUserid()+"";
         if(!houseRent.getHousephoto0().equals("null")){
-            OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",mail)
+            OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("userid",id)
                     .addParams("imageName",houseRent.getHousephoto0()).build().execute(new BitmapCallback() {
                         @Override
                         public void onError(Call call, Exception e) {
@@ -350,11 +350,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         @Override
                         public void onResponse(Bitmap bitmap) {
+                            if(bitmap == null){
+                                Log.d("asfasdf","Asfdsaf");
+                            }
                             housephoto0.setImageBitmap(bitmap);
                         }
                     });
             if(!houseRent.getHousephoto1().equals("null")){
-                OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",mail)
+                OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("userid",id)
                         .addParams("imageName",houseRent.getHousephoto1()).build().execute(new BitmapCallback() {
                     @Override
                     public void onError(Call call, Exception e) {
@@ -367,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
                 if(!houseRent.getHousephoto2().equals("null")){
-                    OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",mail)
+                    OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("userid",id)
                             .addParams("imageName",houseRent.getHousephoto2()).build().execute(new BitmapCallback() {
                         @Override
                         public void onError(Call call, Exception e) {
@@ -380,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     });
                     if(!houseRent.getHousephoto3().equals("null")){
-                        OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("usermail",mail)
+                        OkHttpUtils.get().url(Variable.host+"/downloadImage").addParams("userid",id)
                                 .addParams("imageName",houseRent.getHousephoto3()).build().execute(new BitmapCallback() {
                             @Override
                             public void onError(Call call, Exception e) {

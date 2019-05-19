@@ -360,7 +360,7 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
                         for (int num = 0 ; files.size() > num ; num++){
                             String filename1 = filename+"_"+num+".jpg";
                             OkHttpUtils.post().addFile("file",filename1,files.get(num))
-                                    .addParams("usermail",preferences.getString("mail","")).url(Variable.host+"/uploadImage").build().execute(new Callback() {
+                                    .addParams("userid",preferences.getString("id","")).url(Variable.host+"/uploadImage").build().execute(new Callback() {
                                 @Override
                                 public Object parseNetworkResponse(Response response) throws Exception {
                                     return null;
@@ -404,10 +404,11 @@ public class HouseSell extends AppCompatActivity implements View.OnClickListener
                 String username = preferences.getString("name","");
                 String userphone = preferences.getString("phone","");
                 String usersex;
-                if (preferences.getString("sex","").equals(true))
+                if (preferences.getString("sex","").equals("true")) {
                     usersex = "1";
-                else
+                }else {
                     usersex = "0";
+                }
                 String houselatitude = housesell_latitude+"";
                 String houselongtitude = housesell_longitude+ "";
                 if (UPDATE_HOUSE_SELL){

@@ -21,6 +21,7 @@ import com.example.a84045.lbstest1.Global.Variable;
 import com.example.a84045.lbstest1.Util.GsonUtil;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.Callback;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.w3c.dom.Text;
 
@@ -54,6 +55,12 @@ public class Manage extends AppCompatActivity implements View.OnClickListener{
 
     private FloatingActionButton fabrent;
 
+    private TextView manage_user_total;
+
+    private TextView manage_rent_total;
+
+    private TextView manage_order_total;
+
     public abstract class UserCallback extends Callback<List<User>>
     {
         @Override
@@ -61,6 +68,16 @@ public class Manage extends AppCompatActivity implements View.OnClickListener{
         {
             String string = response.body().string();
             return GsonUtil.changeGsonToList(string,User.class);
+        }
+    }
+
+    public abstract class StringListCallback extends Callback<List<String>>
+    {
+        @Override
+        public List<String> parseNetworkResponse(Response response) throws IOException
+        {
+            String string = response.body().string();
+            return GsonUtil.changeGsonToList(string,String.class);
         }
     }
 
@@ -88,6 +105,9 @@ public class Manage extends AppCompatActivity implements View.OnClickListener{
         page3 = findViewById(R.id.manage_page3);
         fab = findViewById(R.id.fab);
         fabrent = findViewById(R.id.fab_rent);
+        manage_order_total = findViewById(R.id.manage_order_total);
+        manage_rent_total = findViewById(R.id.manage_rent_total);
+        manage_user_total = findViewById(R.id.manage_user_total);
         usermanage.setOnClickListener(this);
         rentmanage.setOnClickListener(this);
         ordermange.setOnClickListener(this);
@@ -119,6 +139,7 @@ public class Manage extends AppCompatActivity implements View.OnClickListener{
                 page3.setVisibility(View.GONE);
                 break;
             case R.id.order_manage:
+                getTotal();
                 ordermange.setBackgroundResource(R.color.colorPrimary);
                 usermanage.setBackgroundResource(R.color.colorUnConfirm);
                 rentmanage.setBackgroundResource(R.color.colorUnConfirm);
@@ -169,7 +190,19 @@ public class Manage extends AppCompatActivity implements View.OnClickListener{
     }
 
     private void getTotal(){
+        OkHttpUtils.post().url(Variable.host+"/gettotal").build().execute(new StringListCallback() {
+            @Override
+            public void onError(Call call, Exception e) {
 
+            }
+
+            @Override
+            public void onResponse(List<String> response) {
+                manage_user_total.setText("用户人数："+response.get(0));
+                manage_rent_total.setText("房源数量："+response.get(1));
+                manage_order_total.setText("订单数量："+response.get(2));
+            }
+        });
     }
 
     @Override
