@@ -1,6 +1,7 @@
 package com.example.a84045.lbstest1;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,10 @@ public class Signup extends AppCompatActivity {
 
     ProgressBar progressBar;
 
+    private Button send_mail;
+
+    private String validateNum;
+
     private Handler handler = new Handler(){
         public void handleMessage(Message message){
             switch (message.what){
@@ -81,6 +86,7 @@ public class Signup extends AppCompatActivity {
         signupButton = findViewById(R.id.btn_signup);
         loginLink = findViewById(R.id.link_login);
         progressBar = findViewById(R.id.signup_progress);
+        send_mail = findViewById(R.id.send_mail);
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +98,31 @@ public class Signup extends AppCompatActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK,null);
                 finish();
+            }
+        });
+        send_mail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = emailText.getText().toString();
+                if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    emailText.setError("enter a valid email address");
+                } else {
+                    send_mail.setClickable(false);
+                    countDownTimer.start();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            int num = (int) ((Math.random()*9+1)*100000);
+                            validateNum = num+"";
+                            try {
+                                OkHttpUtils.post().url(Variable.host+"/sendmail").addParams("tomail",emailText.getText().toString())
+                                        .addParams("num", String.valueOf(num)).build().execute();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
             }
         });
     }
@@ -154,28 +185,59 @@ public class Signup extends AppCompatActivity {
         String name = nameText.getText().toString();
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
-
+        String validate = validateText.getText().toString();
         if (name.isEmpty() || name.length() < 2) {
-            nameText.setError("at least 2 characters");
+            nameText.setError("至少两位字符");
             valid = false;
         } else {
             nameText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailText.setError("enter a valid email address");
+            emailText.setError("错误邮箱地址");
             valid = false;
         } else {
             emailText.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            passwordText.setError("between 4 and 10 alphanumeric characters");
+            passwordText.setError("请输入4到10位字符");
             valid = false;
         } else {
             passwordText.setError(null);
         }
 
+        if(validate.isEmpty() || !validate.equals(validateNum)){
+            validateText.setError("验证码错误");
+            valid = false;
+        }else{
+            validateText.setError(null);
+        }
         return valid;
+    }
+
+    /**
+     * CountDownTimer 实现倒计时
+     */
+    private CountDownTimer countDownTimer = new CountDownTimer(60000, 1000) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+            String value = String.valueOf((int) (millisUntilFinished / 1000));
+            send_mail.setText(value+"s");
+        }
+
+        @Override
+        public void onFinish() {
+            send_mail.setText("Send Email");
+            send_mail.setClickable(true);
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(countDownTimer!=null){
+            countDownTimer.cancel();
+        }
     }
 }
