@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserInfo">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/userinfo_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="@color/design_default_color_primary"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+
+        <android.support.v7.widget.ActionMenuView
+            android:id="@+id/action_menu_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="用户信息"
+            android:textColor="#000"
+            android:textSize="20dp" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_margin="20dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#000"
+                android:text="用户名:"/>
+
+            <EditText
+                android:id="@+id/username_info"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:textSize="20sp"
+                android:inputType="text" />
+
+            <Button
+                android:id="@+id/username_update"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/update"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="20dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#000"
+                android:text="邮箱:"/>
+
+            <EditText
+                android:id="@+id/usermail_info"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:textSize="20sp"
+                android:inputType="textEmailAddress" />
+
+            <Button
+                android:id="@+id/usermail_update"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/update"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="20dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#000"
+                android:text="电话:"/>
+
+            <EditText
+                android:id="@+id/userphone_info"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:textSize="20sp"
+                android:inputType="phone" />
+
+            <Button
+                android:id="@+id/userphone_update"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/update"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="20dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#000"
+                android:text="性别:"/>
+
+            <RadioGroup
+                android:id="@+id/usersex_info"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:focusableInTouchMode="false"
+                android:focusable="false">
+
+                <RadioButton
+                    android:id="@+id/usersex_info_man"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="Man"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:id="@+id/usersex_info_woman"
+                    android:focusableInTouchMode="false"
+                    android:focusable="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="Woman"/>
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/usersex_update"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/update"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="20dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#000"
+                android:text="密码:"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/userpass_info_old"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:textSize="20sp"
+                    android:inputType="textPassword"
+                    android:hint="旧密码"/>
+
+                <EditText
+                    android:visibility="gone"
+                    android:id="@+id/userpass_info_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:textSize="20sp"
+                    android:inputType="textPassword"
+                    android:hint="新密码"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/userpass_update"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/update"/>
+
+        </LinearLayout>
+
+        <Button
+            android:layout_margin="20dp"
+            android:id="@+id/user_commit"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="保存"/>
+    </LinearLayout>
+
+</LinearLayout>

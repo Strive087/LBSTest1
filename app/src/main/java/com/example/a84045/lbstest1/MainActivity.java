@@ -68,6 +68,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -103,6 +104,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String housemasterphone;
 
     private SharedPreferences preferences;
+
+    private TextView username;
+
+    private CircleImageView circleImageView;
 
     public abstract class HouseRentCallback extends Callback<List<HouseRent>>
     {
@@ -225,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigationView.setItemIconPadding(30);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             setPopupWindow();
-        }
+        };
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -248,6 +253,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
             }
         });
+        View view = navigationView.getHeaderView(0);
+        username = view.findViewById(R.id.username);
+        username.setText(preferences.getString("name","李文悦"));
+        circleImageView = view.findViewById(R.id.icon_image);
+        circleImageView.setOnClickListener(this);
     }
 
     private void initMap() {
@@ -544,6 +554,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.send_order:
                 sendOrder();
+                break;
+            case R.id.icon_image:
+                Intent intent = new Intent(this,UserInfo.class);
+                startActivity(intent);
                 break;
             default:
                 break;
