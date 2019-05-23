@@ -8,10 +8,4 @@
         android:title="Search"
         app:showAsAction="always"></item>
 
-    <item
-        android:id="@+id/message"
-        android:icon="@drawable/message"
-        android:title="Message"
-        app:showAsAction="always"></item>
-
 </menu>

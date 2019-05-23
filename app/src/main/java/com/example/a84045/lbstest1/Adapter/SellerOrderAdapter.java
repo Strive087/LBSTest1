@@ -58,21 +58,6 @@ public class SellerOrderAdapter  extends ArrayAdapter<HouseOrderEntity> {
         viewHolder.buyerphone.setText(orderEntity.getSellerphone());
         viewHolder.price.setText(orderEntity.getOrderprice()+"元");
         viewHolder.orderday.setText(orderEntity.getOrderday()+"月");
-        if(orderEntity.getOrderstatu() == -1){
-            viewHolder.orderstatu.setText("已取消订单");
-            viewHolder.cancle.setText("已取消");
-            viewHolder.cancle.setClickable(false);
-        }
-        if(orderEntity.getOrderstatu() == 0){
-            viewHolder.orderstatu.setText("等待房东确认");
-            viewHolder.cancle.setText("确认订单");
-            viewHolder.cancle.setClickable(true);
-        }
-        if(orderEntity.getOrderstatu() == 1){
-            viewHolder.orderstatu.setText("完成交易");
-            viewHolder.cancle.setText("已完成");
-            viewHolder.cancle.setClickable(false);
-        }
         viewHolder.cancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,6 +88,21 @@ public class SellerOrderAdapter  extends ArrayAdapter<HouseOrderEntity> {
                 }).start();
             }
         });
+        if(orderEntity.getOrderstatu() == -1){
+            viewHolder.orderstatu.setText("已取消订单");
+            viewHolder.cancle.setText("已取消");
+            viewHolder.cancle.setClickable(false);
+        }
+        if(orderEntity.getOrderstatu() == 0){
+            viewHolder.orderstatu.setText("等待房东确认");
+            viewHolder.cancle.setText("确认订单");
+            viewHolder.cancle.setClickable(true);
+        }
+        if(orderEntity.getOrderstatu() == 1){
+            viewHolder.orderstatu.setText("完成交易");
+            viewHolder.cancle.setText("已完成");
+            viewHolder.cancle.setClickable(false);
+        }
         return view;
     }
 

@@ -53,8 +53,6 @@ public class Manage extends AppCompatActivity implements View.OnClickListener{
 
     private FloatingActionButton fab;
 
-    private FloatingActionButton fabrent;
-
     private TextView manage_user_total;
 
     private TextView manage_rent_total;
@@ -104,7 +102,6 @@ public class Manage extends AppCompatActivity implements View.OnClickListener{
         page2 = findViewById(R.id.manage_page2);
         page3 = findViewById(R.id.manage_page3);
         fab = findViewById(R.id.fab);
-        fabrent = findViewById(R.id.fab_rent);
         manage_order_total = findViewById(R.id.manage_order_total);
         manage_rent_total = findViewById(R.id.manage_rent_total);
         manage_user_total = findViewById(R.id.manage_user_total);
@@ -112,7 +109,6 @@ public class Manage extends AppCompatActivity implements View.OnClickListener{
         rentmanage.setOnClickListener(this);
         ordermange.setOnClickListener(this);
         fab.setOnClickListener(this);
-        fabrent.setOnClickListener(this);
         getuser();
     }
 
@@ -151,10 +147,6 @@ public class Manage extends AppCompatActivity implements View.OnClickListener{
                 intent = new Intent(this,AdminAddUser.class);
                 startActivityForResult(intent,ADD_SUCCESS);
                 break;
-            case R.id.fab_rent:
-                intent = new Intent(this,HouseSell.class);
-                intent.putExtra("manage",true);
-                startActivityForResult(intent,ADD_SUCCESS);
             default:
                 break;
         }
