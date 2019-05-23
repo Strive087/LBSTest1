@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setPopupWindow(){
         rootView = findViewById(R.id.root_main);
-        popupWindow = new PopupWindow(getApplicationContext());
         popupWindow=new PopupWindow(this);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         //popupWindow.setOutsideTouchable(true);
@@ -527,8 +526,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()){
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
-                break;
-            case R.id.message:
                 break;
             case R.id.search:
                 Intent intent = new Intent(getApplicationContext(),SearchHouse.class);
